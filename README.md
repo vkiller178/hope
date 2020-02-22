@@ -6,10 +6,10 @@
 
 ## roadMap
 
-- [x]集成 nextjs 前端渲染和 koa api 服务
-- [ ]引入 TypeORM 数据库管理工具
-- [ ]代码编译（估计比使用 ts-node 执行性能更好，而且编译后的代码体积以及执行效率会更高）
-- [ ] docker 镜像制作（也就是 Dockerfile 的编写，使得部署更简单）
+[x]集成 nextjs 前端渲染和 koa api 服务
+[ ]引入 TypeORM 数据库管理工具
+[ ]代码编译（估计比使用 ts-node 执行性能更好，而且编译后的代码体积以及执行效率会更高）
+[ ] docker 镜像制作（也就是 Dockerfile 的编写，使得部署更简单）
 
 ## 开发
 
