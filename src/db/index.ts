@@ -1,5 +1,5 @@
 import { createConnection } from 'typeorm'
-// import * as entities from './models'
+import * as entities from './models'
 
 export default async function connection() {
   return createConnection({
@@ -10,6 +10,6 @@ export default async function connection() {
     password: process.env.DB_PASSWORD,
     database: 'hope',
     synchronize: false,
-    entities: ['./models/*.ts'],
+    entities: Object.values(entities),
   })
 }

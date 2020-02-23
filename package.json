@@ -16,6 +16,8 @@
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/koa": "^2.11.1",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-router": "^7.4.0",
     "@types/node": "^13.7.4",
     "@types/react": "^16.9.22",
     "eslint": "^6.8.0",
@@ -25,11 +27,17 @@
     "typescript": "^3.8.2"
   },
   "dependencies": {
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.11.0",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-multer": "^1.0.2",
+    "koa-router": "^8.0.8",
     "mysql2": "^2.1.0",
     "next": "^9.2.2",
     "react": "^16.12.0",
+    "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1-alpha.2",
     "typeorm": "^0.2.22"
   }

@@ -1,10 +1,13 @@
 import Koa from 'koa'
-import { resolve } from 'path'
+import 'reflect-metadata'
 import { useKoaServer } from 'routing-controllers'
-import { createNextMiddleware } from './next'
-import connection from './db'
-
 import { config as lodenv } from 'dotenv'
+
+import * as controllers from './api'
+import * as middlewares from './middlewares'
+import { createNextMiddleware } from './middlewares/next'
+
+import connection from './db'
 
 lodenv()
 
@@ -16,6 +19,14 @@ const port = 3000
 
   const nextMiddleware = await createNextMiddleware()
   const koaApp = new Koa()
+
+  useKoaServer(koaApp, {
+    controllers: Object.values(controllers),
+    middlewares: Object.values(middlewares),
+    routePrefix: '/api/v1',
+    defaults: { paramOptions: { required: true } },
+    defaultErrorHandler: false,
+  })
 
   koaApp.use(nextMiddleware)
 

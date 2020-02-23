@@ -39,3 +39,9 @@ yarn typeorm migration:run
 ```
 
 > typeorm 使用技巧可以参见[这个文档](./src/db/README.md)
+
+- 数据库回滚
+
+```bash
+yarn typeorm migration:revert
+```
