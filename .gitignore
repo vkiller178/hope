@@ -1,4 +1,4 @@
 node_modules
 /.env
 /ormconfig.json
-/.next
+/src/nextRoot/.next

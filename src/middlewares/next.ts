@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { dev, apiPrefix } from '../../app'
+import { dev, apiPrefix } from '../app'
 import { parse } from 'url'
 
 import next from 'next'
@@ -7,7 +7,7 @@ import { Context } from 'koa'
 import { Middleware } from 'routing-controllers'
 
 export async function createNextMiddleware() {
-  const nextApp = next({ dir: resolve(__dirname, '../..'), dev })
+  const nextApp = next({ dir: resolve(__dirname, '../nextRoot'), dev })
   await nextApp.prepare()
 
   const handler = await nextApp.getRequestHandler()
