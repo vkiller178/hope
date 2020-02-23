@@ -3,11 +3,11 @@ import 'reflect-metadata'
 import { useKoaServer } from 'routing-controllers'
 import { config as lodenv } from 'dotenv'
 
-import * as controllers from './api'
-import * as middlewares from './middlewares'
-import { createNextMiddleware } from './middlewares/next'
+import * as controllers from './src/api'
+import * as middlewares from './src/middlewares'
+import { createNextMiddleware } from './src/middlewares/next'
 
-import connection from './db'
+import connection from './src/db'
 
 lodenv()
 
