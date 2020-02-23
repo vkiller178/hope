@@ -15,12 +15,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "port": 5858,
-      "runtimeArgs": [
-        "--inspect=5858",
-        "-r",
-        "ts-node/register",
-        "./src/app.ts"
-      ]
+      "runtimeArgs": ["--inspect=5858", "-r", "ts-node/register", "./app.ts"]
     }
   ]
 }
