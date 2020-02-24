@@ -16,7 +16,11 @@ export default class User {
     let u: UserModel
 
     if (
-      (await UserModel.find({ where: { username: body.username } })).length > 0
+      (
+        await UserModel.find({
+          where: { username: body.username, password: body.password },
+        })
+      ).length > 0
     ) {
       bundleWithCode('用户名已存在')
     }
@@ -27,5 +31,13 @@ export default class User {
     }
     await u.save()
     return u
+  }
+
+  @Post('/login')
+  async login(@Body() body) {
+    const u = await UserModel.findOne({ where: { username: body.username } })
+    if (!u) bundleWithCode('用户未找到')
+
+    return 'success'
   }
 }

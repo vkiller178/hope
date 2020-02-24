@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu'
-import AccountCircle from '@material-ui/icons/AccountCircle'
+import { AccountCircle, GitHub } from '@material-ui/icons'
 import { auth } from '../../js/auth'
 import { useState } from 'react'
 
@@ -89,6 +89,7 @@ export default () => {
             vkiller
           </Typography>
           {auth ? <Account /> : <Button color="inherit">登录</Button>}
+          <GitHub />
         </Toolbar>
       </AppBar>
     </div>

@@ -5,9 +5,11 @@ import { parse } from 'url'
 import next from 'next'
 import { Context } from 'koa'
 import { Middleware } from 'routing-controllers'
+import conf from '../nextRoot/next.config'
 
 export async function createNextMiddleware() {
-  const nextApp = next({ dir: resolve(__dirname, '../nextRoot'), dev })
+  //TODO: compiling阶段非常慢
+  const nextApp = next({ dir: resolve(__dirname, '../nextRoot'), dev, conf })
   await nextApp.prepare()
 
   const handler = await nextApp.getRequestHandler()
