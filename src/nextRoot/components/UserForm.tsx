@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 import useFormValidator, { normalize } from '../js/hooks/useFormValidateor'
 import { post } from '../js/request'
+import useAuth, { LOCALSTATE } from '../js/hooks/useAuth'
 
 const useStyle = makeStyles(theme => ({
   root: {
@@ -34,6 +35,8 @@ type User = {
 const UserForm: React.FC = () => {
   const classes = useStyle()
 
+  const { auth, setLocal } = useAuth()
+
   const [allFields, { checkForm, form }] = useFormValidator({
     username: {
       rule: [{ validator: val => !!val, msg: '请输入用户名' }],
@@ -43,11 +46,13 @@ const UserForm: React.FC = () => {
     },
   })
 
-  const doSometing = () => {
+  const doSometing = async () => {
     if (checkForm()) {
-      console.log('check success')
-
-      post('login', form)
+      const res = await post<string | undefined>('/open/login', form)
+      if (res) {
+        setLocal(LOCALSTATE.logged)
+        location.href = '/'
+      }
     }
   }
 

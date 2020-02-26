@@ -1,0 +1,13 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    "node_modules/**/node_modules",
+    "*.js.map",
+    "src/nextRoot/.next",
+    "dist"
+  ],
+  "watch": ["src/**/*"],
+  "ext": "js json ts",
+  "exec": "node --inspect=5858 -r ts-node/register src/app.ts"
+}

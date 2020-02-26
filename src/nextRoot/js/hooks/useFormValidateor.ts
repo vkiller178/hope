@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Dispatch } from 'react'
 
 interface formData {
   [key: string]: {
     rule?: Array<RuleObj>
+    defaultVal?: any //初始值
   }
 }
 interface RuleObj {
@@ -31,7 +32,7 @@ type validator = (
   {
     // hasError: boolean
     checkForm: checkForm
-
+    setForm: Dispatch<any>
     form: any
   }
 ]
@@ -85,17 +86,21 @@ const useFormValidator: validator = opts => {
       setInit({ ...init, [fieldName]: true })
     } else {
       for (const key in res) {
-        if (res.hasOwnProperty(key)) {
-          setInit(_init => ({ ..._init, [key]: true }))
-
-          // check
-          const [_, rule] = hasRule(key)
-          if (rule) {
-            const { error } = rule(res[key].value)
-            if (error) {
-              hasError = true
+        //FIXME: 针对没有配置rule的表单验证还存在问题
+        try {
+          if (res.hasOwnProperty(key)) {
+            setInit(_init => ({ ..._init, [key]: true }))
+            // check
+            const [_, rule] = hasRule(key)
+            if (rule) {
+              const { error } = rule(res[key].value)
+              if (error) {
+                hasError = true
+              }
             }
           }
+        } catch (error) {
+          hasError = false
         }
       }
     }
@@ -106,11 +111,16 @@ const useFormValidator: validator = opts => {
   const hasRule = (key: string) => formRule.current.find(v => v[0] === key)
 
   for (const key of Object.keys(opts)) {
+    const opt = opts[key]
     if (opts[key].rule && !hasRule(key)) {
       // push rule
       formRule.current = formRule.current.concat([
         [key, v => matchRules(opts[key].rule, v)],
       ])
+    }
+
+    if (opt.defaultVal && form[key] !== '') {
+      form[key] = opt.defaultVal
     }
 
     const o: Props = {}
@@ -164,6 +174,7 @@ const useFormValidator: validator = opts => {
     {
       checkForm,
       form,
+      setForm,
     },
   ]
 }

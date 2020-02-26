@@ -1,21 +1,15 @@
+//@see: https://github.com/zeit/next.js/blob/canary/examples/custom-server-typescript/tsconfig.server.json
 {
+  "extends": "./src/nextRoot/tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
-    "checkJs": false,
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "strictNullChecks": false,
-    "allowJs": true,
-    "pretty": true,
-    "outDir": "./dist",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "outDir": "dist",
+    "target": "es2017",
+    "isolatedModules": false,
+    "noEmit": false,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["es2017", "dom"],
-    "jsx": "preserve"
+    "experimentalDecorators": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules/**/*"]
 }

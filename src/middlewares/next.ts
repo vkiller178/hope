@@ -4,7 +4,6 @@ import { parse } from 'url'
 
 import next from 'next'
 import { Context } from 'koa'
-import { Middleware } from 'routing-controllers'
 import conf from '../nextRoot/next.config'
 
 export async function createNextMiddleware() {
@@ -14,15 +13,10 @@ export async function createNextMiddleware() {
 
   const handler = await nextApp.getRequestHandler()
 
-  @Middleware({ type: 'before' })
-  class NextMiddleware {
-    async use(ctx: Context, next) {
-      if (!~ctx.originalUrl.indexOf(apiPrefix)) {
-        return await handler(ctx.req, ctx.res, parse(ctx.originalUrl, true))
-      }
-      await next()
+  return async (ctx: Context, next) => {
+    if (!~ctx.originalUrl.indexOf(apiPrefix)) {
+      return await handler(ctx.req, ctx.res, parse(ctx.originalUrl, true))
     }
+    await next()
   }
-
-  return NextMiddleware
 }

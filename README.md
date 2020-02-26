@@ -46,6 +46,20 @@ yarn typeorm migration:run
 yarn typeorm migration:revert
 ```
 
+## 部署
+
+- 构建镜像
+
+```bash
+docker build . -t hope
+```
+
+- 启动程序
+
+```bash
+docker run -it --rm --name hope -p 3000:3000 hope:latest
+```
+
 ## 资料
 
 - [material-ui](https://material-ui.com/zh/guides/server-rendering/)

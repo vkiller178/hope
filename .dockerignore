@@ -1,0 +1,5 @@
+# https://stackoverflow.com/questions/43747776/copy-with-docker-but-with-exclusion
+
+**/node_modules
+.vscode
+src/nextRoot/.next

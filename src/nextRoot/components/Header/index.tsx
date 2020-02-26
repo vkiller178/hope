@@ -7,12 +7,14 @@ import {
   Typography,
   Menu,
   MenuItem,
+  Link,
 } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu'
-import { AccountCircle, GitHub } from '@material-ui/icons'
-import { auth } from '../../js/auth'
+import { AccountCircle, GitHub, LinkRounded } from '@material-ui/icons'
 import { useState } from 'react'
+import useAuth from '../../js/hooks/useAuth'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,7 +38,13 @@ const Account = () => {
     setAnchorEl(null)
   }
 
+  const toWrite = () => {
+    handleClose()
+    route.push('/write')
+  }
+
   const open = Boolean(anchorEl)
+  const route = useRouter()
 
   return (
     <div>
@@ -64,8 +72,7 @@ const Account = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={toWrite}>写文章</MenuItem>
       </Menu>
     </div>
   )
@@ -73,6 +80,9 @@ const Account = () => {
 
 export default () => {
   const classes = useStyles()
+  const route = useRouter()
+  const { isLogged } = useAuth()
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -85,10 +95,20 @@ export default () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6">
+          <Typography
+            onClick={() => route.push('/')}
+            className={classes.title}
+            variant="h6"
+          >
             vkiller
           </Typography>
-          {auth ? <Account /> : <Button color="inherit">登录</Button>}
+          {isLogged ? (
+            <Account />
+          ) : (
+            <Button onClick={() => route.push('/login')} color="inherit">
+              登录
+            </Button>
+          )}
           <GitHub />
         </Toolbar>
       </AppBar>

@@ -1,12 +1,31 @@
-import { Controller, Get, Param, Post, Body } from 'routing-controllers'
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Ctx,
+  CookieParam,
+  CookieParams,
+} from 'routing-controllers'
 import { UserModel } from '../db/models'
 import { bundleWithCode } from '../utils/errorbundle'
+import { createToken, decodeToken } from '../middlewares/jwt'
+import { Context } from 'koa'
 
 @Controller()
 export default class User {
   @Get('/user/:id')
   async allUser(@Param('id') id) {
     return await UserModel.findOne(id)
+  }
+  @Get('/user')
+  async getSelf(@CookieParams() { token }) {
+    const { data } = decodeToken(token)
+    return {
+      id: +data,
+      username: (await UserModel.findOne({ where: { id: data } })).username,
+    }
   }
   @Post('/user')
   async createUser(@Body() body) {
@@ -33,11 +52,14 @@ export default class User {
     return u
   }
 
-  @Post('/login')
-  async login(@Body() body) {
+  @Post('/open/login')
+  async login(@Body() body, @Ctx() ctx: Context) {
     const u = await UserModel.findOne({ where: { username: body.username } })
     if (!u) bundleWithCode('用户未找到')
 
+    ctx.cookies.set('token', createToken(u.id), {
+      sameSite: true,
+    })
     return 'success'
   }
 }

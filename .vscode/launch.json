@@ -6,20 +6,25 @@
   "configurations": [
     {
       "type": "node",
+      "request": "attach",
+      "name": "Attach",
+      "port": 5858,
+      "skipFiles": ["<node_internals>/**"],
+      "restart": true
+    },
+    {
+      "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "outFiles": ["${workspaceFolder}/**/*.js"],
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/nodemon",
       "restart": true,
       "sourceMaps": true,
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart",
       "port": 5858,
       "runtimeArgs": [
-        "--inspect=5858",
-        "-r",
-        "ts-node/register",
-        "./src/app.ts"
+        "-x",
+        "node --inspect=5858 -r ts-node/register/transpile-only src/app.ts"
       ]
     }
   ]

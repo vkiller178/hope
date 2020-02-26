@@ -7,14 +7,14 @@ interface BaseResponse {
   msg?: string
 }
 
-enum ToastLevel {
+enum RequestType {
   'all' = '@',
   'error' = '!',
+  'server' = '$',
 }
 
 const instance = Axios.create({
   withCredentials: true,
-  baseURL: '/api/v1',
 })
 
 /**
@@ -30,14 +30,14 @@ instance.interceptors.response.use(
   ({ data, status, config }: AxiosResponse<BaseResponse>) => {
     if (status === 200) {
       if (data.code === 1) {
-        if (config.headers['X-QUITE'] === ToastLevel.all) {
+        if (config.headers['X-QUITE'] === RequestType.all) {
           // 成功提示
         }
         return data.data
       } else {
         // 业务问题
         console.warn(`httpClient:${data.msg}`)
-        if (config.headers['X-QUITE'] === ToastLevel.all) {
+        if (config.headers['X-QUITE'] === RequestType.all) {
           // 失败提示
         }
       }
@@ -45,6 +45,7 @@ instance.interceptors.response.use(
     return
   },
   ({ response, config, message }: AxiosError) => {
+    console.error(`httpClient:${message}`)
     if (response && response.status === 401) {
       // 清除登陆状态
       return
@@ -58,20 +59,33 @@ instance.interceptors.response.use(
   }
 )
 
+let _localStorage
+try {
+  _localStorage = localStorage
+} catch (error) {
+  _localStorage = null
+}
+
 instance.interceptors.request.use((config: AxiosRequestConfig) => {
-  const token = localStorage.getItem('token')
+  // 如果是ssr，那么在getInitialProps中调用get或post，是拿不到localStorage对象的
+  const token = _localStorage?.getItem('token')
   if (token) {
     config.headers['token'] = token
   }
   if (config.url) {
     const mark = config.url.slice(0, 1)
-    for (const key in ToastLevel) {
+    for (const key in RequestType) {
       //@ts-ignore
-      if (ToastLevel[key] === mark) {
+      if (RequestType[key] === mark) {
         //@ts-ignore
-        config.headers['X-QUITE'] = ToastLevel[key]
+        config.headers['X-QUITE'] = RequestType[key]
         config.url = config.url.slice(1)
       }
+    }
+    if (mark === RequestType.server) {
+      config.baseURL = 'http://localhost:3000/api/v1'
+    } else {
+      config.baseURL = '/api/v1'
     }
   }
   return config

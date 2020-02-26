@@ -1,4 +1,11 @@
-import { Entity, BaseEntity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Entity,
+  BaseEntity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+} from 'typeorm'
+import { PostModel } from '.'
 
 @Entity({ name: 'user' })
 export default class User extends BaseEntity {
@@ -8,4 +15,10 @@ export default class User extends BaseEntity {
   username: string
   @Column()
   password: string
+
+  @OneToMany(
+    type => PostModel,
+    post => post.uid
+  )
+  posts: Array<PostModel>
 }
