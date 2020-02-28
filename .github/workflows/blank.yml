@@ -4,14 +4,19 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-    - name: build
-      run: npm,
-           npm run server:build
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag hope:$(date +%s)
+      - uses: actions/checkout@v2
+      - name: build
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+        run: npm,
+          npm run server:build
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag hope:$(date +%s)
