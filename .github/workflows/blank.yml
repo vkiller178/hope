@@ -6,12 +6,15 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    container: ./Dockerfile
+    
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
 
     steps:
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+    - name: build
+      run: yarn server:build
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag hope:$(date +%s)
