@@ -25,7 +25,8 @@ jobs:
         run: docker login index.docker.io/v1/ -u rxh1212 --password=wAHRFXSiewg7guA
       - name: Push image
         run: |
-          IMAGE_ID=docker.pkg.github.com/xixi20160512/hope/hope
+          # IMAGE_ID=docker.pkg.github.com/xixi20160512/hope/hope
+          IMAGE_ID= hope
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           # Strip "v" prefix from tag name
