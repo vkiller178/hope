@@ -12,8 +12,9 @@ WORKDIR /app
 
 RUN apk add nodejs yarn
 
-COPY --from=packages /app/node_modules /app/
+COPY --from=packages /app /app
 
-COPY package.json dist template/server/*  /app/
+COPY template/server/*  /app/
+COPy dist /app/dist
 
 CMD yarn server:start
