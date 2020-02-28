@@ -9,6 +9,7 @@ import {
   MenuItem,
   Link,
 } from '@material-ui/core'
+import React from 'react'
 
 import MenuIcon from '@material-ui/icons/Menu'
 import { AccountCircle, GitHub, LinkRounded } from '@material-ui/icons'

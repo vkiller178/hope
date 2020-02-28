@@ -1,19 +1,9 @@
-FROM node:12-alpine
-LABEL author="vkiller"
-
+FROM alpine
 EXPOSE 3000
 WORKDIR /app
 
-# make yarn cached in some layer
-# so, since second build,it is faster
-COPY package.json /app/package.json
-COPY yarn.lock /app/yarn.lock
-RUN yarn
+VOLUME /Users/ruanxihao/Library/Caches/Yarn/v6 /usr/local/share/.cache/yarn/v6
 
-COPY . /app
+COPY . template/server/*  /app/
 
-RUN cp /app/template/.env.server /app/.env && \
-    cp /app/template/ormconfig.server.json /app/ormconfig.json && \
-    yarn next:build
-
-CMD yarn typeorm migration:run && yarn server:start
+CMD apk add nodejs yarn && yarn server:start

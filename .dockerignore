@@ -1,5 +1,8 @@
 # https://stackoverflow.com/questions/43747776/copy-with-docker-but-with-exclusion
-
+.git
 **/node_modules
+.DS_Store
 .vscode
-src/nextRoot/.next
+src
+
+.yarn.lock

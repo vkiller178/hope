@@ -8,8 +8,9 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "dev": "nodemon",
     "next:build": "cd src/nextRoot && next build",
-    "server:start": "ts-node src/app.ts",
-    "server:local": "yarn next:build && yarn server:start"
+    "server:build": "rimraf ./dist && tsc && yarn next:build && cp -r src/nextRoot/.next dist/nextRoot/.next",
+    "server:start": "yarn --prod && yarn server:db && node dist/app.js",
+    "server:db": "typeorm migration:run"
   },
   "keywords": [
     "blog",
@@ -26,9 +27,14 @@
     "@types/react": "^16.9.22",
     "eslint": "^6.8.0",
     "nodemon": "^1.18.10",
-    "react-dom": "^16.12.0",
+    "ora": "^4.0.3",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^6.2.1",
     "ts-node": "7.0.1",
-    "typescript": "^3.8.2"
+    "typescript": "^3.8.2",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.3",
@@ -48,6 +54,7 @@
     "next": "^9.2.2",
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1-alpha.2",
     "showdown": "^1.9.1",

@@ -1,14 +1,16 @@
-import { resolve } from 'path'
 import { dev, apiPrefix } from '../app'
 import { parse } from 'url'
+import { resolve } from 'path'
 
 import next from 'next'
 import { Context } from 'koa'
-import conf from '../nextRoot/next.config'
 
 export async function createNextMiddleware() {
   //TODO: compiling阶段非常慢
-  const nextApp = next({ dir: resolve(__dirname, '../nextRoot'), dev, conf })
+  const nextApp = next({
+    dir: resolve(__dirname, '../nextRoot'),
+    dev,
+  })
   await nextApp.prepare()
 
   const handler = await nextApp.getRequestHandler()
