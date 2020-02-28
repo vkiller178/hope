@@ -7,12 +7,12 @@ import {
   Typography,
   Menu,
   MenuItem,
-  Link,
+  Box,
 } from '@material-ui/core'
 import React from 'react'
 
 import MenuIcon from '@material-ui/icons/Menu'
-import { AccountCircle, GitHub, LinkRounded } from '@material-ui/icons'
+import { AccountCircle } from '@material-ui/icons'
 import { useState } from 'react'
 import useAuth from '../../js/hooks/useAuth'
 import { useRouter } from 'next/router'
@@ -21,11 +21,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
+  },
+  menuButton: {
+    paddingRight: 0,
   },
 }))
 
@@ -88,14 +88,6 @@ export default () => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            className={classes.menuButton}
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             onClick={() => route.push('/')}
             className={classes.title}
@@ -110,7 +102,9 @@ export default () => {
               登录
             </Button>
           )}
-          <GitHub />
+          <IconButton className={classes.menuButton} color="inherit">
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>

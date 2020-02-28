@@ -1,17 +1,6 @@
-import React, { useState } from 'react'
-import {
-  Card,
-  TextField,
-  makeStyles,
-  Grid,
-  Button,
-  Typography,
-  Link,
-  Container,
-} from '@material-ui/core'
+import React from 'react'
+import { Card, TextField, makeStyles, Grid } from '@material-ui/core'
 import useFormValidator, { normalize } from '../js/hooks/useFormValidateor'
-import { post } from '../js/request'
-import useAuth, { LOCALSTATE } from '../js/hooks/useAuth'
 
 const useStyle = makeStyles(theme => ({
   root: {
@@ -32,12 +21,8 @@ type User = {
   password: string
 }
 
-const UserForm: React.FC = () => {
-  const classes = useStyle()
-
-  const { auth, setLocal } = useAuth()
-
-  const [allFields, { checkForm, form }] = useFormValidator({
+export const useUserForm = () =>
+  useFormValidator({
     username: {
       rule: [{ validator: val => !!val, msg: '请输入用户名' }],
     },
@@ -46,15 +31,8 @@ const UserForm: React.FC = () => {
     },
   })
 
-  const doSometing = async () => {
-    if (checkForm()) {
-      const res = await post<string | undefined>('/open/login', form)
-      if (res) {
-        setLocal(LOCALSTATE.logged)
-        location.href = '/'
-      }
-    }
-  }
+const UserForm: React.FC<{ allFields: any }> = ({ allFields, children }) => {
+  const classes = useStyle()
 
   return (
     <Grid container alignItems="center" justify="center">
@@ -80,20 +58,7 @@ const UserForm: React.FC = () => {
                 {...normalize(allFields.password)}
               />
             </Grid>
-            <Grid item>
-              <Grid container alignItems="center" spacing={2}>
-                <Grid item>
-                  <Button onClick={doSometing} variant="outlined">
-                    登录
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Typography variant="caption">
-                    还没有账号？立即<Link>注册</Link>！
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
+            {children}
           </Grid>
         </form>
       </Card>

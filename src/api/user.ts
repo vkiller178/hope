@@ -7,6 +7,8 @@ import {
   Ctx,
   CookieParam,
   CookieParams,
+  Params,
+  BodyParam,
 } from 'routing-controllers'
 import { UserModel } from '../db/models'
 import { bundleWithCode } from '../utils/errorbundle'
@@ -27,7 +29,7 @@ export default class User {
       username: (await UserModel.findOne({ where: { id: data } })).username,
     }
   }
-  @Post('/user')
+  @Post('/open/registry')
   async createUser(@Body() body) {
     if (!body.username) bundleWithCode('username为必填项目')
     if (!body.password) bundleWithCode('password为必填项目')

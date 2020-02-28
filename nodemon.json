@@ -7,7 +7,7 @@
     "src/nextRoot/.next",
     "dist"
   ],
-  "watch": ["src/**/*"],
+  "watch": ["package.json"],
   "ext": "js json ts",
   "exec": "node --inspect=5858 -r ts-node/register src/app.ts"
 }

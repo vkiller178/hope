@@ -6,6 +6,7 @@ const LOCALSTATEKEY = 'logStatus'
 export enum LOCALSTATE {
   'logged' = 'logged',
   'none' = 'none',
+  'checking' = 'checking',
 }
 
 function getLocalState(): LOCALSTATE {
@@ -29,25 +30,27 @@ export default (): { [key: string]: any } & {
   setLocal: setLocalFuc
   isLogged: boolean
 } => {
-  const [auth, setAuth] = useState<authInfo>({})
+  const [auth, setAuth] = useState<authInfo>({ logStatus: LOCALSTATE.checking })
 
   const getUserInfo = async () => {
     const u = await get<{ username: string; id: number }>('/user')
 
-    setAuth({ ...auth, ...u })
+    if (!u) {
+      setAuth({ ...auth, logStatus: LOCALSTATE.none })
+      changeLocalState(LOCALSTATE.none)
+    } else {
+      setAuth({ ...auth, ...u, logStatus: LOCALSTATE.logged })
+    }
   }
   const setLocal: setLocalFuc = s => {
     changeLocalState(s)
     setAuth({ ...auth, logStatus: s })
   }
-  useEffect(() => {
-    if (auth.logStatus === LOCALSTATE.logged && !auth.id) {
-      getUserInfo()
-    }
-  }, [auth.logStatus])
 
   useEffect(() => {
-    setAuth({ ...auth, logStatus: getLocalState() })
+    if (getLocalState() === LOCALSTATE.logged) {
+      getUserInfo()
+    }
   }, [])
 
   return { auth, setLocal, isLogged: auth.logStatus === LOCALSTATE.logged }
