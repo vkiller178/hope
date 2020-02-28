@@ -72,6 +72,7 @@ export default class PostController {
   async getPost(@Param('id') id) {
     let p = await PostModel.findOne({
       where: { id, hide: postHide.show },
+      relations: ['uid'],
     })
     if (!p) bundleWithCode('文章不存在，或者不可见')
 

@@ -14,7 +14,7 @@ import React from 'react'
 import MenuIcon from '@material-ui/icons/Menu'
 import { AccountCircle } from '@material-ui/icons'
 import { useState } from 'react'
-import useAuth from '../../js/hooks/useAuth'
+import useAuth, { LOCALSTATE } from '../../js/hooks/useAuth'
 import { useRouter } from 'next/router'
 
 const useStyles = makeStyles(theme => ({
@@ -44,6 +44,10 @@ const Account = () => {
     route.push('/write')
   }
 
+  const { setLocal } = useAuth(false)
+  const logout = () => {
+    setLocal(LOCALSTATE.none)
+  }
   const open = Boolean(anchorEl)
   const route = useRouter()
 
@@ -74,6 +78,7 @@ const Account = () => {
         onClose={handleClose}
       >
         <MenuItem onClick={toWrite}>写文章</MenuItem>
+        <MenuItem onClick={logout}>退出</MenuItem>
       </Menu>
     </div>
   )

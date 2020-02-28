@@ -25,7 +25,9 @@ interface authInfo {
 
 type setLocalFuc = (status: LOCALSTATE) => void
 
-export default (): { [key: string]: any } & {
+export default (
+  loadAuthInit: boolean = true
+): { [key: string]: any } & {
   auth: authInfo
   setLocal: setLocalFuc
   isLogged: boolean
@@ -48,7 +50,7 @@ export default (): { [key: string]: any } & {
   }
 
   useEffect(() => {
-    if (getLocalState() === LOCALSTATE.logged) {
+    if (getLocalState() === LOCALSTATE.logged && loadAuthInit) {
       getUserInfo()
     }
   }, [])
