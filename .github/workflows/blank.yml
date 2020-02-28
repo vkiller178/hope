@@ -12,16 +12,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: build
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: yarn
-      - run: yarn server:build
+      # - name: build
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
+      # - run: yarn
+      # - run: yarn server:build
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag hope
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        # run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: docker login index.docker.io/v1/ -u rxh1212 --password=wAHRFXSiewg7guA
       - name: Push image
         run: |
           IMAGE_ID=docker.pkg.github.com/xixi20160512/hope/hope
