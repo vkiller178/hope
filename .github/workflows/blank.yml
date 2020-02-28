@@ -26,7 +26,7 @@ jobs:
       - name: Push image
         run: |
           # IMAGE_ID=docker.pkg.github.com/xixi20160512/hope/hope
-          IMAGE_ID= hope
+          IMAGE_ID= rxh1212/hope
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           # Strip "v" prefix from tag name
