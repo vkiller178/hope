@@ -3,7 +3,7 @@
   "host": "172.17.0.1",
   "port": 3306,
   "username": "root",
-  "password": "vuaHdnc2939",
+  "password": "123456",
   "database": "hope",
   "entities": ["dist/db/models/index.js"],
   "migrationsTableName": "custom_migration_table",
