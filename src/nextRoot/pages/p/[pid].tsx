@@ -3,9 +3,12 @@ import { useRouter } from 'next/router'
 import { get } from '../../js/request'
 import showdown from 'showdown'
 import { Box, makeStyles, Grid, Typography, Container } from '@material-ui/core'
+import { Edit as EditIcon, Loyalty as TagIcon } from '@material-ui/icons'
 import Header from '../../components/Header'
 import Head from 'next/head'
 import clsx from 'clsx'
+import useAuth from '../../js/hooks/useAuth'
+import time from 'dayjs'
 
 interface Post {
   title: string
@@ -24,7 +27,6 @@ const useStyles = makeStyles(theme => ({
     '& .title': {
       fontWeight: 500,
       fontSize: 16,
-      marginBottom: '12px',
     },
     '& .author': {
       fontStyle: 'italic',
@@ -34,9 +36,6 @@ const useStyles = makeStyles(theme => ({
       borderRadius: '2px',
       backgroundColor: 'lightblue',
       fontSize: '12px',
-      '&:not(:last-child)': {
-        marginRight: theme.spacing(1),
-      },
     },
   },
 }))
@@ -48,6 +47,7 @@ const PostView = ({ post }) => {
   useEffect(() => {}, [])
   const classes = useStyles()
   const router = useRouter()
+  const { isMe } = useAuth()
   return (
     <div>
       <Head>
@@ -65,18 +65,36 @@ const PostView = ({ post }) => {
           direction="column"
           alignItems="flex-start"
         >
-          <Grid className="title" item xs={12}>
+          <Grid className="title" container xs={12}>
             <div>{post.title}</div>
+            {isMe(post.uid.id) && (
+              <EditIcon
+                onClick={() => router.push(`/write?pid=${post.id}`)}
+                fontSize="small"
+              />
+            )}
           </Grid>
-          <Grid container spacing={2} alignItems="flex-start">
+          <Grid container spacing={1} alignItems="flex-start">
             <Grid item>
               <div className="author">{post.uid.username}</div>
             </Grid>
             <Grid item>
-              {post.tags.split(' ').map(t => (
-                <span className="tag">{t}</span>
-              ))}
+              <Typography color="textSecondary" variant="caption">
+                {time(post.createTime || post.updateTime).format(
+                  'YYYY/MM/DD HH时'
+                )}
+              </Typography>
             </Grid>
+          </Grid>
+          <Grid container spacing={1}>
+            <Grid item>
+              <TagIcon fontSize="small" />
+            </Grid>
+            {post.tags.split(' ').map(t => (
+              <Grid item>
+                <span className="tag">{t}</span>
+              </Grid>
+            ))}
           </Grid>
         </Grid>
         <Box

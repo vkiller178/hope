@@ -20,6 +20,9 @@ import { useRouter } from 'next/router'
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+    position: 'sticky',
+    top: 0,
+    ...theme.mixins.toolbar,
   },
   title: {
     flexGrow: 1,
@@ -91,7 +94,7 @@ export default () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar>
         <Toolbar>
           <Typography
             onClick={() => route.push('/')}

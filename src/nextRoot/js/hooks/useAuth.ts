@@ -25,15 +25,18 @@ interface authInfo {
 
 type setLocalFuc = (status: LOCALSTATE) => void
 
-export default (
-  loadAuthInit: boolean = true
-): { [key: string]: any } & {
+type useAuthFunResponse = { [key: string]: any } & {
   auth: authInfo
   setLocal: setLocalFuc
   isLogged: boolean
-} => {
-  const [auth, setAuth] = useState<authInfo>({ logStatus: LOCALSTATE.checking })
+  isMe: (id: any) => boolean
+}
 
+export default (loadAuthInit: boolean = true): useAuthFunResponse => {
+  const [auth, setAuth] = useState<authInfo>({ logStatus: LOCALSTATE.checking })
+  /**
+   * TODO: 目前会造成每个用到此hook的组件都会调用一次查询用户信息
+   */
   const getUserInfo = async () => {
     const u = await get<{ username: string; id: number }>('/user')
 
@@ -49,11 +52,19 @@ export default (
     setAuth({ ...auth, logStatus: s })
   }
 
+  const isMe = (id: any) =>
+    auth.logStatus === LOCALSTATE.logged && auth.id === id
+
   useEffect(() => {
     if (getLocalState() === LOCALSTATE.logged && loadAuthInit) {
       getUserInfo()
     }
   }, [])
 
-  return { auth, setLocal, isLogged: auth.logStatus === LOCALSTATE.logged }
+  return {
+    auth,
+    setLocal,
+    isLogged: auth.logStatus === LOCALSTATE.logged,
+    isMe,
+  }
 }
