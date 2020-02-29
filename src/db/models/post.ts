@@ -1,11 +1,6 @@
-import {
-  Entity,
-  BaseEntity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { UserModel } from '.'
+import BaseModel from './common/base'
 
 export enum postHide {
   'hide' = '1',
@@ -15,7 +10,10 @@ export enum postHide {
 //TODO: 增加各种时间戳
 
 @Entity({ name: 'post' })
-export default class Post extends BaseEntity {
+export default class Post extends BaseModel {
+  constructor() {
+    super()
+  }
   @PrimaryGeneratedColumn()
   id: number
   @Column()

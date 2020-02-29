@@ -24,7 +24,7 @@ export default class PostController {
       p[key] = body[key]
     }
     p.uid = decodeToken(token).data
-    await p.save()
+    await p._save()
     return p
   }
   @Get('/post/:id')
@@ -54,7 +54,7 @@ export default class PostController {
       p[key] = body[key]
     }
 
-    await p.save()
+    await p._save()
 
     return 'success'
   }

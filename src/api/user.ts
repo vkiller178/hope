@@ -50,7 +50,7 @@ export default class User {
     for (const key in body) {
       u[key] = body[key]
     }
-    await u.save()
+    await u._save()
     return u
   }
 

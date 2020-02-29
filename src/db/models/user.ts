@@ -1,14 +1,12 @@
-import {
-  Entity,
-  BaseEntity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-} from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { PostModel } from '.'
+import BaseModel from './common/base'
 
 @Entity({ name: 'user' })
-export default class User extends BaseEntity {
+export default class User extends BaseModel {
+  constructor() {
+    super()
+  }
   @PrimaryGeneratedColumn()
   id: number
   @Column()
