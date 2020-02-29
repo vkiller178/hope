@@ -65,8 +65,11 @@ docker build . -t hope
 
 - 启动程序
 
+先从镜像仓库（docker.io）拉取镜像，然后预设一些环境变量就可以运行起来了。
+
 ```bash
-docker run -it --rm --name hope -p 3000:3000 hope:latest
+docker pull rxh1212/hope
+docker run -it --rm -e HOPE_DB_HOST=<your-mysql-hostname> HOPE_DB_PASSWORD=<your-mysql-password> -p 3000:3000 --name hope  rxh1212/hope
 ```
 
 ## 资料
