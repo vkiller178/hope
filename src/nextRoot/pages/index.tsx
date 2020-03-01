@@ -90,7 +90,7 @@ const useIndexStyle = makeStyles(theme => ({
     },
   },
   content: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
   },
 }))
 
@@ -111,15 +111,15 @@ const Index: React.FC = () => {
   return (
     <div>
       <Header />
-      <Container style={{ marginTop: '24px' }} maxWidth="md">
+      <Container style={{ marginTop: '16px' }} maxWidth="md">
         <Grid spacing={2} container alignItems="flex-start">
-          <Grid className={classes.content} item sm={9} xs={12}>
+          <Grid className={classes.content} item lg={9} sm={12}>
             {posts.map(p => (
               <PostCard {...p} key={p.id} />
             ))}
           </Grid>
 
-          <Hidden xsDown>
+          <Hidden smDown>
             <Grid className={classes.sidebar} item sm={3}>
               <Card className="cardInfo">222</Card>
             </Grid>
