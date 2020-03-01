@@ -1,6 +1,5 @@
 //@ts-nocheck
 
-import 'normalize.css'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { useEffect } from 'react'
 import Head from 'next/head'

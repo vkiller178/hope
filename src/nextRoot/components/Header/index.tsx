@@ -23,6 +23,7 @@ const useStyles = makeStyles(theme => ({
     position: 'sticky',
     top: 0,
     ...theme.mixins.toolbar,
+    zIndex: 1,
   },
   title: {
     flexGrow: 1,
