@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { UserModel } from '.'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  FindManyOptions,
+} from 'typeorm'
+import { UserModel, ActionModel, PostModel } from '.'
 import BaseModel from './common/base'
+import { UserActionType } from './action'
 
 export enum postHide {
   'hide' = '1',
@@ -11,6 +18,8 @@ export enum postHide {
 
 @Entity({ name: 'post' })
 export default class Post extends BaseModel {
+  like: number
+  click: number
   constructor() {
     super()
   }
@@ -30,4 +39,18 @@ export default class Post extends BaseModel {
     user => user.posts
   )
   uid: number
+
+  static async findPostWithUserActions(options?: FindManyOptions) {
+    const posts = await this.find<PostModel>(options)
+    for (const post of posts) {
+      post.like = post.click = await ActionModel.count({
+        where: { type: UserActionType.like, target: post.id },
+      })
+      post.click = post.click = await ActionModel.count({
+        where: { type: UserActionType.click, target: post.id },
+      })
+    }
+
+    return posts
+  }
 }

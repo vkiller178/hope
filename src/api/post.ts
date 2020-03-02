@@ -4,15 +4,12 @@ import {
   Param,
   Post,
   Body,
-  Ctx,
-  CookieParam,
   CookieParams,
   QueryParams,
 } from 'routing-controllers'
-import { UserModel, PostModel } from '../db/models'
+import { PostModel } from '../db/models'
 import { bundleWithCode } from '../utils/errorbundle'
-import { createToken, decodeToken } from '../middlewares/jwt'
-import { Context } from 'koa'
+import { decodeToken } from '../middlewares/jwt'
 import { postHide } from '../db/models/post'
 
 @Controller()
@@ -61,7 +58,7 @@ export default class PostController {
 
   @Get('/open/feed')
   async getFeedPost(@QueryParams() { skip, take }) {
-    return await PostModel.find({
+    return await PostModel.findPostWithUserActions({
       where: { hide: postHide.show },
       relations: ['uid'],
       skip,

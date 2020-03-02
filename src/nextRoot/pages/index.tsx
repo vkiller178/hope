@@ -23,6 +23,8 @@ interface Post {
   uid: {
     username: string
   }
+  like: number
+  click: number
 }
 
 const useCardStyle = makeStyles(theme => ({
@@ -61,7 +63,7 @@ const PostCard: React.FC<Post> = p => {
         <Grid item>
           <Button size="small" color="secondary" variant="outlined">
             <ThumbUp fontSize="small" />
-            <span className={classes.count}>22</span>
+            <span className={classes.count}>{p.like}</span>
           </Button>
         </Grid>
         <Grid item>
@@ -72,7 +74,7 @@ const PostCard: React.FC<Post> = p => {
               className={classes.count}
               color="textSecondary"
             >
-              22
+              {p.click}
             </Typography>
           </Grid>
         </Grid>

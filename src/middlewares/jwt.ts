@@ -28,8 +28,9 @@ export const createToken = (secretInfo: any): string => {
 }
 
 export const decodeToken = (
-  token: string
-): { data: any; exp: number; iat: number } => {
+  token: string | undefined
+): { data?: any; exp?: number; iat?: number } => {
+  if (!token) return {}
   return jsonwebtoken.decode(token)
 }
 

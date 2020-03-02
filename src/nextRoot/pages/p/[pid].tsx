@@ -9,7 +9,7 @@ import Head from 'next/head'
 import clsx from 'clsx'
 import useAuth from '../../js/hooks/useAuth'
 import time from 'dayjs'
-
+import { post as postMethod } from '../../js/request'
 interface Post {
   title: string
   content: string
@@ -48,6 +48,15 @@ const PostView = ({ post }) => {
   const classes = useStyles()
   const router = useRouter()
   const { isMe } = useAuth()
+
+  useEffect(() => {
+    postMethod('open/userAction', {
+      type: 'click',
+      payload: {
+        pid: post.id,
+      },
+    })
+  }, [])
   return (
     <div>
       <Head>
