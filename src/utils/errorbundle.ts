@@ -6,6 +6,7 @@ interface bundleWithCodeOpts {
 
 export enum ErrorCodeMap {
   BASE = 200000,
+  UNTRACKED = 200001,
 }
 export const bundleWithCode = (opt: bundleWithCodeOpts | string) => {
   if (typeof opt === 'string') {
@@ -19,5 +20,8 @@ export const bundleWithCode = (opt: bundleWithCodeOpts | string) => {
 }
 
 export const exportBundleMessage = (msg: string): bundleWithCodeOpts => {
-  return JSON.parse(msg)
+  return {
+    code: ErrorCodeMap.UNTRACKED,
+    message: msg,
+  }
 }

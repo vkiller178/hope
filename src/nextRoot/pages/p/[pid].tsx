@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { get } from '../../js/request'
-import showdown from 'showdown'
 import { Box, makeStyles, Grid, Typography, Container } from '@material-ui/core'
 import { Edit as EditIcon, Loyalty as TagIcon } from '@material-ui/icons'
 import Header from '../../components/Header'
@@ -9,7 +8,7 @@ import Head from 'next/head'
 import clsx from 'clsx'
 import useAuth from '../../js/hooks/useAuth'
 import time from 'dayjs'
-import { post as postMethod } from '../../js/request'
+import converter from '../../../utils/markdownConvert'
 interface Post {
   title: string
   content: string
@@ -40,23 +39,12 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const converter = new showdown.Converter()
-converter.setFlavor('github')
-
 const PostView = ({ post }) => {
   useEffect(() => {}, [])
   const classes = useStyles()
   const router = useRouter()
   const { isMe } = useAuth()
 
-  useEffect(() => {
-    postMethod('open/userAction', {
-      type: 'click',
-      payload: {
-        pid: post.id,
-      },
-    })
-  }, [])
   return (
     <div>
       <Head>

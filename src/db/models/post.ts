@@ -3,23 +3,24 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  FindManyOptions,
+  AfterLoad,
 } from 'typeorm'
-import { UserModel, ActionModel, PostModel } from '.'
+import { UserModel, ActionModel } from '.'
 import BaseModel from './common/base'
 import { UserActionType } from './action'
+import converter from '../../utils/markdownConvert'
 
 export enum postHide {
   'hide' = '1',
   'show' = '0',
 }
 
-//TODO: 增加各种时间戳
-
 @Entity({ name: 'post' })
 export default class Post extends BaseModel {
-  like: number
-  click: number
+  protected like: number
+  protected click: number
+  protected brief: string
+
   constructor() {
     super()
   }
@@ -40,17 +41,37 @@ export default class Post extends BaseModel {
   )
   uid: number
 
-  static async findPostWithUserActions(options?: FindManyOptions) {
-    const posts = await this.find<PostModel>(options)
-    for (const post of posts) {
-      post.like = post.click = await ActionModel.count({
-        where: { type: UserActionType.like, target: post.id },
-      })
-      post.click = post.click = await ActionModel.count({
-        where: { type: UserActionType.click, target: post.id },
-      })
+  @AfterLoad()
+  getBrief() {
+    if (this.content) {
+      this.brief = converter.makeHtml(this.content.slice(0, 100))
     }
+  }
 
-    return posts
+  @AfterLoad()
+  async getLike() {
+    this.like = await ActionModel.count({
+      where: { type: UserActionType.like, target: this.id },
+    })
+  }
+
+  @AfterLoad()
+  async getClick() {
+    this.click = await ActionModel.count({
+      where: { type: UserActionType.click, target: this.id },
+    })
+  }
+
+  static async getFeed(props) {
+    return await this.find({
+      where: { hide: postHide.show },
+      relations: ['uid'],
+      ...props,
+    }).then(posts =>
+      posts.map(p => {
+        delete p.content
+        return p
+      })
+    )
   }
 }

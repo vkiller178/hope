@@ -11,7 +11,10 @@ export default class User extends BaseModel {
   id: number
   @Column()
   username: string
-  @Column()
+  /**
+   * 可以在查询之后隐藏这个属性
+   */
+  @Column({ select: false })
   password: string
 
   @OneToMany(

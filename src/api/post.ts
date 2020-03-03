@@ -58,12 +58,7 @@ export default class PostController {
 
   @Get('/open/feed')
   async getFeedPost(@QueryParams() { skip, take }) {
-    return await PostModel.findPostWithUserActions({
-      where: { hide: postHide.show },
-      relations: ['uid'],
-      skip,
-      take,
-    })
+    return await PostModel.getFeed({ skip, take })
   }
   @Get('/open/post/:id')
   async getPost(@Param('id') id) {
