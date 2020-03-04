@@ -140,11 +140,17 @@ const Index: React.FC = () => {
     loading: false,
   })
 
+  const [lastTick, setLastTick] = useState(0)
+
   const getFeed = async () => {
+    setLoad(_ => ({ loading: true }))
+
     const feeds = await get<Array<Post>>('/open/feed', {
       skip: posts.length,
       take: 10,
     })
+
+    setLastTick(performance.now())
 
     if (feeds.length > 0) {
       setPosts(_ => _.concat(feeds))
@@ -156,14 +162,9 @@ const Index: React.FC = () => {
     getFeed()
   }, [])
 
-  useEffect(() => {
-    load.loading && getFeed()
-  }, [load.loading])
-
   const scrollWrapper = useRef<HTMLElement>()
 
   const scrollTake = 400
-  const [lastTick, setLastTick] = useState(0)
 
   function onScroll() {
     const now = performance.now()
@@ -174,9 +175,7 @@ const Index: React.FC = () => {
       load.loading === false &&
       now - lastTick > scrollTake
     ) {
-      console.log('load')
-      setLastTick(now)
-      setLoad({ loading: true })
+      getFeed()
     }
   }
 
