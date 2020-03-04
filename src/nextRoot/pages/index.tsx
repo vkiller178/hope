@@ -119,7 +119,7 @@ const useIndexStyle = makeStyles(theme => ({
   },
 }))
 
-function useMixedWindowSize() {
+export function useMixedWindowSize() {
   const [size, setSize] = useState({ height: 0, width: 0 })
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, CSSProperties } from 'react'
 import useAuth from '../js/hooks/useAuth'
 import {
   Typography,
@@ -19,6 +19,7 @@ import {
   FormControlLabel,
   Radio,
   FormLabel,
+  useTheme,
 } from '@material-ui/core'
 import { MoreHoriz, Close as CloseIcon } from '@material-ui/icons'
 import Stackedit from '../js/stackedit'
@@ -26,6 +27,11 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import useFormValidator, { normalize } from '../js/hooks/useFormValidateor'
 import { post as httpPost, get } from '../js/request'
+
+import dynamic from 'next/dynamic'
+import Head from 'next/head'
+import Header from '../components/Header'
+import { useMixedWindowSize } from '.'
 
 interface Post {
   id?: string
@@ -46,6 +52,11 @@ const Write: React.FC = () => {
     },
     tags: {},
   })
+  const { height } = useMixedWindowSize()
+  const theme = useTheme()
+
+  const editorHeight = height - Number(theme.mixins.toolbar.minHeight)
+
   const onSavePostSetting = async () => {
     if (checkForm()) {
       let res: any
@@ -53,21 +64,32 @@ const Write: React.FC = () => {
         res = await httpPost(`/post/${form.id}`, form)
       } else {
         res = await httpPost('/post', form)
+        setForm(_ => ({
+          ..._,
+          id: res.id,
+          title: res.title,
+          tags: res.tags,
+          hide: res.hide,
+        }))
       }
 
       if (res) {
         setOpen(false)
-        setForm(_ => ({ ..._, id: res.id }))
       }
     }
   }
 
-  const autoSave = async () => {
+  const autoSave = async (v: string, saveCallback: any) => {
+    setForm(_ => ({ ..._, content: v }))
     if (!form.id) {
       setOpen(true)
+      saveCallback('需要其他信息才能够保存')
       return false
     }
-    return await httpPost(`/post/${form.id}`, { content: form.content })
+
+    await httpPost(`/post/${form.id}`, { content: v })
+
+    saveCallback('保存成功')
   }
 
   const router = useRouter()
@@ -75,15 +97,16 @@ const Write: React.FC = () => {
   useEffect(() => {
     const { pid } = router.query
     if (pid && typeof pid === 'string') {
-      //edit post
-
       get<any>(`/post/${pid}`).then(res => {
-        setForm(_form => ({ ..._form, id: pid, ...res }))
+        setForm(_form => ({
+          ..._form,
+          id: +pid,
+          title: res.title,
+          tags: res.tags,
+          hide: res.hide,
+          content: res.content,
+        }))
       })
-    } else {
-      // new post
-      // pid 不是在组件didMounted之后就存在的
-      // setOpen(true)
     }
   }, [router.query.pid])
 
@@ -119,13 +142,20 @@ const Write: React.FC = () => {
 
   return (
     <div>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
+        />
+      </Head>
+      <Header />
       {isLogged ? (
         <>
-          <Editor
-            value={form.content}
-            onChange={val => setForm(_form => ({ ..._form, content: val }))}
-            onSave={autoSave}
+          <NewEditor
+            initValue={form.content}
             onMore={() => setOpen(true)}
+            onChange={autoSave}
+            style={{ height: editorHeight }}
           />
           <Dialog maxWidth="sm" open={open} onClose={() => setOpen(false)}>
             <DialogTitle>文章设置</DialogTitle>
@@ -149,144 +179,137 @@ const Write: React.FC = () => {
   )
 }
 
-const useEditorStyles = makeStyles(theme => ({
-  root: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+// 分钟
+const autoSaveTime = 0.2
+
+const useEditorStyle = makeStyles(theme => ({
+  editor: {
+    visibility: 'hidden',
   },
   ActionButton: {
     position: 'fixed',
     right: 30,
     bottom: 30,
   },
-  otherWrapper: {},
+  root: {
+    backgroundColor: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    '& .CodeMirror': {
+      zIndex: 0,
+      paddingBottom: '30px',
+      border: 'none',
+      flexGrow: 1,
+    },
+    '& .editor-statusbar': {
+      position: 'fixed',
+      bottom: 0,
+      backgroundColor: '#007acc',
+      color: '#fff',
+      padding: '2px 10px',
+      width: '100%',
+    },
+  },
 }))
 
-// 分钟
-const autoSaveTime = 0.2
+const editorOptions = {
+  autofocus: true,
+}
 
-const Editor: React.FC<{
-  onMore: any
-  onChange: any
-  onSave: () => Promise<any>
-  value: string
+const NewEditor: React.FC<{
+  initValue?: string
+  onChange?: (val: string, saveCallback: () => void) => void
+  onMore?: () => void
+  style?: CSSProperties
 }> = props => {
-  const classes = useEditorStyles()
-  const [content, setContent] = useState<string>(props.value || '')
+  const classes = useEditorStyle()
+  const editorRef = useRef<any>()
+  const timerRef = useRef<any>()
+  const saveCallback = useRef<any>()
+  const initValueRef = useRef('')
   const [snackbar, setSnackbar] = useState<{ open: boolean; content?: any }>({
     open: false,
   })
-  const [time, setTime] = useState<{ stm?: number; ctm?: number }>({})
-  const onFileChange = file => {
-    const newContent = file.content.text
-    if (newContent === props.value) return
-    setContent(newContent)
-    props.onChange(newContent)
-    setTime(oldTm => ({ ...oldTm, ctm: window.performance.now() }))
-  }
-  const autoSave = useRef<any>()
-  autoSave.current = () => {
-    if (!content || time.stm > time.ctm) return
-    props.onSave().then(flag => {
-      if (flag) setTime(_ => ({ ..._, stm: window.performance.now() }))
-      setSnackbar(_snack => ({
-        ..._snack,
-        content: <Typography>保存{flag ? '成功' : '失败'}</Typography>,
-      }))
 
-      setTimeout(() => {
-        setSnackbar(_snack => ({
-          ..._snack,
-          open: false,
-        }))
-      }, 500)
-    })
-    setSnackbar({
-      ...snackbar,
-      open: true,
-      content: (
-        <Grid spacing={1} alignItems="center" direction="row" container>
-          <Grid item>
-            <CircularProgress size={16} color="primary" />
-          </Grid>
-          <Grid item>
-            <Typography>正在保存</Typography>
-          </Grid>
-        </Grid>
-      ),
-    })
+  const [content, setContent] = useState('')
+  saveCallback.current = () => {
+    const _val = editorRef.current ? editorRef.current.value() : ''
+    if (_val && _val !== content) {
+      setContent(_val)
+    }
   }
-
-  const timerRef = useRef<any>()
-  const editorRef = useRef<any>()
 
   useEffect(() => {
-    const stackedit = new Stackedit()
-    editorRef.current = stackedit
-    const el = document.querySelector('#my-editor')
-    // Open the iframe
-    stackedit.openFile({
-      name: 'Filename', // with an optional filename
-      content: {
-        text: content, // and the Markdown content.
-      },
-      wrapper: el,
+    function saveCallback(content: string = '') {
+      setSnackbar(_ => ({ ..._, content }))
+
+      setTimeout(() => {
+        setSnackbar(_ => ({ ..._, open: false }))
+      }, 300)
+    }
+    if (content && props.onChange) {
+      setSnackbar(_ => ({ content: '正在保存', open: true }))
+      props.onChange(content, saveCallback)
+    }
+  }, [content])
+
+  useEffect(() => {
+    const wrapper = document.querySelector('#c-editor')
+    import('simplemde').then(({ default: SimpleMDE }) => {
+      editorRef.current = new SimpleMDE({ element: wrapper, ...editorOptions })
+      editorRef.current.value(initValueRef.current || '')
     })
-    stackedit.on('fileChange', onFileChange)
+
     timerRef.current = setInterval(() => {
-      autoSave.current && autoSave.current()
+      saveCallback.current && saveCallback.current()
     }, autoSaveTime * 60 * 1000)
+
     return () => {
-      stackedit.off('fileChange', onFileChange)
       clearInterval(timerRef.current)
     }
   }, [])
 
   useEffect(() => {
-    if (props.value !== content) {
-      setContent(() => props.value)
-      editorRef.current.openFile({
-        content: {
-          text: props.value,
-        },
-      })
+    if (props.initValue) {
+      editorRef.current
+        ? !editorRef.current.value() && editorRef.current.value(props.initValue)
+        : (initValueRef.current = props.initValue)
     }
-  }, [props.value])
+
+    console.log(window.innerHeight)
+  }, [props.initValue])
+
   return (
-    <>
-      <div className={classes.root} id="my-editor" />
-      <div className={clsx(classes.otherWrapper)}>
-        <Fab
-          onClick={props.onMore}
-          size="small"
-          color="primary"
-          className={classes.ActionButton}
-        >
-          <MoreHoriz />
-        </Fab>
-        <Snackbar
-          open={snackbar.open}
-          anchorOrigin={{
-            horizontal: 'left',
-            vertical: 'bottom',
-          }}
-          message={snackbar.content}
-          action={
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="secondary"
-              onClick={() => setSnackbar({ ...snackbar, open: false })}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          }
-        />
-      </div>
-    </>
+    <div className={classes.root}>
+      <textarea className={classes.editor} id="c-editor" />
+
+      <Fab
+        onClick={() => props.onMore && props.onMore()}
+        size="small"
+        color="primary"
+        className={classes.ActionButton}
+      >
+        <MoreHoriz />
+      </Fab>
+      <Snackbar
+        open={snackbar.open}
+        anchorOrigin={{
+          horizontal: 'left',
+          vertical: 'bottom',
+        }}
+        message={snackbar.content}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="secondary"
+            onClick={() => setSnackbar({ ...snackbar, open: false })}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
+    </div>
   )
 }
 export default Write

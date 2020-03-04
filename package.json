@@ -61,6 +61,7 @@
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1-alpha.2",
     "showdown": "^1.9.1",
+    "simplemde": "^1.11.2",
     "typeorm": "^0.2.22"
   }
 }
