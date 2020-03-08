@@ -18,11 +18,14 @@ interface Post {
 }
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    backgroundColor: '#fff',
+    padding: theme.spacing(2),
+  },
   markdownBody: {
     // padding: theme.spacing(2),
   },
   titleBlock: {
-    margin: theme.spacing(2, 0),
     '& .title': {
       fontWeight: 500,
       fontSize: 16,
@@ -55,7 +58,7 @@ const PostView = ({ post }) => {
       </Head>
       <Header />
 
-      <Container maxWidth="md">
+      <Container className={classes.root} maxWidth="md">
         <Grid
           className={classes.titleBlock}
           container
