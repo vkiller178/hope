@@ -5,8 +5,22 @@ import { useEffect } from 'react'
 import Head from 'next/head'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from '../js/theme'
+import { makeStyles } from '@material-ui/core'
+
+const useGlobalStyle = makeStyles(theme => ({
+  '@global': {
+    '#__next,body,html': {
+      height: '100%',
+    },
+    '#__next': {
+      overflowY: 'scroll',
+      overscrollBehaviorY: 'none',
+    },
+  },
+}))
 
 function MyApp({ Component, pageProps }) {
+  useGlobalStyle()
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side')

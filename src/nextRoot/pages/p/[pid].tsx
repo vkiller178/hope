@@ -19,7 +19,6 @@ interface Post {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: '#fff',
     padding: theme.spacing(2),
   },
   markdownBody: {
@@ -38,6 +37,11 @@ const useStyles = makeStyles(theme => ({
       borderRadius: '2px',
       backgroundColor: 'lightblue',
       fontSize: '12px',
+    },
+  },
+  '@global': {
+    '#__next': {
+      backgroundColor: '#fff',
     },
   },
 }))

@@ -141,15 +141,6 @@ const useIndexStyle = makeStyles(theme => ({
     position: 'relative',
   },
   root: {},
-  '@global': {
-    'html,body,#__next': {
-      height: '100%',
-    },
-    '#__next': {
-      overflowY: 'scroll',
-      overscrollBehaviorY: 'none',
-    },
-  },
 }))
 
 export function useMixedWindowSize() {
