@@ -8,7 +8,7 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "dev": "nodemon",
     "server:build": "rimraf ./dist && tsc",
-    "server:start": "yarn server:db && node dist/app.js",
+    "server:start": "node build/server.js && yarn server:db && node dist/app.js",
     "server:db": "typeorm migration:run"
   },
   "keywords": [
