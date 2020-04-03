@@ -19,13 +19,13 @@ jobs:
       - run: yarn --no-lockfile
       - run: yarn server:build
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag hope
+        run: docker build . --file Dockerfile --tag fake
       - name: Log into registry
         run: echo "${{ secrets.DOCKER_IO_PASSWORD }}" | docker login docker.io -u rxh1212 --password-stdin
       - name: Push image
         run: |
           # IMAGE_ID=docker.pkg.github.com/xixi20160512/hope/hope
-          IMAGE_ID=rxh1212/hope
+          IMAGE_ID=rxh1212/fake
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           # Strip "v" prefix from tag name

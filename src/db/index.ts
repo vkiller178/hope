@@ -8,7 +8,7 @@ export default async function connection() {
     port: 3306,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: 'hope',
+    database: 'fake',
     synchronize: false,
     entities: Object.values(entities),
   })

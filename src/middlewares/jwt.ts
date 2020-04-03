@@ -7,7 +7,7 @@ const jwtMiddleware = jwt({
   secret: process.env.JWT_SECRET,
   cookie: 'token',
 }).unless({
-  path: [/open/],
+  path: [/open/, /fake/],
 })
 
 const expHours = 24

@@ -10,7 +10,8 @@ export class ResponseHandler implements KoaMiddlewareInterface {
     }
     if (ctx.body && ctx.body.code === undefined) {
       ctx.body = {
-        code: 1,
+        code: 200,
+        message: 'success',
         data: !!ctx.body ? ctx.body : {},
       }
     }

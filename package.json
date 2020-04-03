@@ -7,9 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "dev": "nodemon",
-    "next:build": "cd src/nextRoot && next build",
-    "server:build": "rimraf ./dist && tsc && yarn next:build && cp -r src/nextRoot/.next dist/nextRoot/.next",
-    "server:start": "node build/server.js && yarn server:db && node dist/app.js",
+    "server:build": "rimraf ./dist && tsc",
+    "server:start": "yarn server:db && node dist/app.js",
     "server:db": "typeorm migration:run"
   },
   "keywords": [
@@ -38,9 +37,6 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "@material-ui/core": "^4.9.3",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.45",
     "axios": "^0.19.2",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.0",
