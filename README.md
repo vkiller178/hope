@@ -69,7 +69,7 @@ docker build . -t hope
 
 ```bash
 docker pull rxh1212/hope
-docker run -it --rm -e HOPE_DB_HOST=<your-mysql-hostname> HOPE_DB_PASSWORD=<your-mysql-password> -p 3000:3000 --name hope  rxh1212/hope
+docker run -it --rm -e HOPE_DB_HOST=<your-mysql-hostname> -e HOPE_DB_PASSWORD=<your-mysql-password> -p 3000:3000 --name hope  rxh1212/hope
 ```
 
 ## 资料

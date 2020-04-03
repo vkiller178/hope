@@ -20,6 +20,13 @@ const port = 3000
 
   const koaApp = new Koa()
 
+  koaApp.use(async (ctx, next) => {
+    ctx.set('Access-Control-Allow-Origin', '*')
+    ctx.set('PoweredBy', 'vkiller')
+    ctx.set('Access-Control-Allow-Credentials', 'true')
+    await next()
+  })
+
   koaApp.use(jwtMiddleware)
 
   useKoaServer(koaApp, {
