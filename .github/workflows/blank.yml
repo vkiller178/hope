@@ -34,5 +34,5 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag hope $IMAGE_ID:$VERSION
+          docker tag fake $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
