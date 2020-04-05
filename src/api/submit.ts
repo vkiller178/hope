@@ -23,14 +23,20 @@ export default class User {
 
     const submit = new SuubmitModel()
 
-    for (const key in body) {
-      if (body.hasOwnProperty(key)) {
-        const element = body[key]
-        submit[key] = element
-      }
-    }
+    const last = await SuubmitModel.findOne({
+      where: { username: body.username },
+    })
 
-    await submit.save()
+    if (!last) {
+      for (const key in body) {
+        if (body.hasOwnProperty(key)) {
+          const element = body[key]
+          submit[key] = element
+        }
+      }
+
+      await submit.save()
+    }
 
     return {
       orderNumber: '202040383625072450Q',
