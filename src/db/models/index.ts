@@ -1,1 +1,1 @@
-export { default as SuubmitModel } from './submit'
+export { default as UserModel } from './submit'

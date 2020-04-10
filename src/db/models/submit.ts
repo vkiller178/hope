@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  FindManyOptions,
+} from 'typeorm'
 import BaseModel from './common/base'
 
 @Entity({ name: 'user' })
@@ -24,4 +30,8 @@ export default class User extends BaseModel {
   address: string
   @Column()
   price: string
+
+  static async findBasicInfo(options: FindManyOptions<User>) {
+    return await User.find({ ...options, select: ['username', 'telephone'] })
+  }
 }

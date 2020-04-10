@@ -9,11 +9,12 @@ import {
   CookieParams,
   Params,
   BodyParam,
+  QueryParams,
 } from 'routing-controllers'
 import { bundleWithCode } from '../utils/errorbundle'
 import { createToken, decodeToken } from '../middlewares/jwt'
 import { Context } from 'koa'
-import { SuubmitModel } from '../db/models'
+import { UserModel } from '../db/models'
 
 @Controller('/fake')
 export default class User {
@@ -21,9 +22,9 @@ export default class User {
   async createUser(@Body() body) {
     console.log(body)
 
-    const submit = new SuubmitModel()
+    const submit = new UserModel()
 
-    const last = await SuubmitModel.findOne({
+    const last = await UserModel.findOne({
       where: { username: body.username },
     })
 
@@ -46,5 +47,10 @@ export default class User {
       coins: 0,
       actualPayment: '0.00',
     }
+  }
+
+  @Get('/user/phoneCall')
+  async getUser(@QueryParams() { take, skip }) {
+    return await UserModel.findBasicInfo({ skip, take })
   }
 }
