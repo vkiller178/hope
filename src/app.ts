@@ -1,7 +1,6 @@
 import Koa from 'koa'
 import 'reflect-metadata'
 import { useKoaServer } from 'routing-controllers'
-
 import { config as lodenv } from 'dotenv'
 //优先于业务代码加载
 lodenv()
@@ -9,7 +8,6 @@ import * as controllers from './api'
 import * as middlewares from './middlewares'
 import { createNextMiddleware } from './middlewares/next'
 import jwtMiddleware from './middlewares/jwt'
-
 import connection from './db'
 
 export const dev = process.env.NODE_ENV !== 'production'
@@ -21,8 +19,6 @@ const port = 3000
 
   const nextMiddleware = await createNextMiddleware()
   const koaApp = new Koa()
-
-  // koaApp.use()
 
   koaApp.use(nextMiddleware)
   koaApp.use(jwtMiddleware)

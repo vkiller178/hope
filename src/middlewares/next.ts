@@ -1,7 +1,6 @@
 import { dev, apiPrefix } from '../app'
 import { parse } from 'url'
 import { resolve } from 'path'
-
 import next from 'next'
 import { Context } from 'koa'
 
@@ -26,7 +25,7 @@ const conf = {
 }
 
 export async function createNextMiddleware() {
-  //TODO: compiling阶段非常慢
+  //TODO: compile非常慢
   const nextApp = next({
     dir: resolve(__dirname, '../nextRoot'),
     conf,

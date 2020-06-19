@@ -1,8 +1,8 @@
 FROM node:12-alpine as packages
 
 WORKDIR /app
-COPY package.json /app/package.json
-RUN yarn --prod
+COPY package*.json /app/
+RUN npm i --production
 
 
 FROM alpine
