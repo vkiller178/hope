@@ -17,7 +17,7 @@ interface Post {
   }
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
   },
@@ -54,12 +54,6 @@ const PostView = ({ post }) => {
 
   return (
     <div>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css"
-        ></link>
-      </Head>
       <Header />
 
       <Container className={classes.root} maxWidth="md">
@@ -94,7 +88,7 @@ const PostView = ({ post }) => {
             <Grid item>
               <TagIcon fontSize="small" />
             </Grid>
-            {post.tags.split(' ').map(t => (
+            {post.tags.split(' ').map((t) => (
               <Grid item>
                 <span className="tag">{t}</span>
               </Grid>
@@ -110,7 +104,7 @@ const PostView = ({ post }) => {
   )
 }
 
-PostView.getInitialProps = async ctx => {
+PostView.getInitialProps = async (ctx) => {
   const { pid } = ctx.query
   const post = await get<Post>(`$/open/post/${pid}`)
   post.content = converter.makeHtml(post.content)

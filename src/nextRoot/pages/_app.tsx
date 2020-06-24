@@ -7,7 +7,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import theme from '../js/theme'
 import { makeStyles } from '@material-ui/core'
 
-const useGlobalStyle = makeStyles(theme => ({
+const useGlobalStyle = makeStyles((theme) => ({
   '@global': {
     '#__next,body,html': {
       height: '100%',
