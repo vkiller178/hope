@@ -1,9 +1,14 @@
 name: CI
 
-on: [push]
+on:
+  pull_request:
+    branches: master
+  push:
+    branches: master
+    tags:
 
 jobs:
-  build:
+  buildx:
     runs-on: ubuntu-latest
 
     strategy:
@@ -11,20 +16,32 @@ jobs:
         node-version: [12.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: build
+      - 
+        mame: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          buildx-version: latest
+          qemu-version: latest
+      -
+        name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+      -
+        name: build
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn --no-lockfile
       - run: yarn server:build
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag hope
-      - name: Log into registry
+      -
+        name: Log into registry
         run: echo "${{ secrets.DOCKER_IO_PASSWORD }}" | docker login docker.io -u rxh1212 --password-stdin
-      - name: Push image
+      - 
+        name: Build the Docker image
         run: |
-          # IMAGE_ID=docker.pkg.github.com/xixi20160512/hope/hope
           IMAGE_ID=rxh1212/hope
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
@@ -34,5 +51,6 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag hope $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            -t $IMAGE_ID:$VERSION --push .
