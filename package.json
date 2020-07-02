@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "dev": "nodemon",
-    "next:build": "cd src/nextRoot && next build",
+    "next:build": "cd src/nextRoot && next build && echo $(cat ./.next/BUILD_ID)",
     "server:build": "rimraf ./dist && tsc && yarn next:build && cp -r src/nextRoot/.next dist/nextRoot/.next",
     "server:start": "node build/server.js && yarn server:db && node dist/app.js",
     "server:db": "typeorm migration:run"
