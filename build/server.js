@@ -18,6 +18,9 @@ function dbConfigReplace() {
     ;(replaceMethod() || []).map(args => {
       replaced = (replaced || source).replace(...args)
     })
+
+    if(!replaced) return Promise.resolve('nothing to change')
+
     return new Promise((resolve, reject) => {
       writeFile(path, replaced, err => {
         if (err) {
