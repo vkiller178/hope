@@ -1,2 +1,2 @@
-export { default } from './Card'
+export { default } from './card'
 export * from './types.d'
