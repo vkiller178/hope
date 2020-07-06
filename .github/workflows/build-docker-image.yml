@@ -4,8 +4,6 @@ on:
   pull_request:
     branches: master
   push:
-    branches: master
-    tags:
 
 jobs:
   buildx:
@@ -16,31 +14,25 @@ jobs:
         node-version: [12.x]
 
     steps:
-      - 
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         id: buildx
         uses: crazy-max/ghaction-docker-buildx@v3
         with:
           buildx-version: latest
           qemu-version: latest
-      -
-        name: Available platforms
+      - name: Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
-      -
-        name: build
+      - name: build
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn --no-lockfile
       - run: yarn server:build
-      -
-        name: Log into registry
+      - name: Log into registry
         run: echo "${{ secrets.DOCKER_IO_PASSWORD }}" | docker login docker.io -u rxh1212 --password-stdin
-      - 
-        name: Build the Docker image
+      - name: Build the Docker image
         run: |
           IMAGE_ID=rxh1212/hope
           # Strip git ref prefix from version

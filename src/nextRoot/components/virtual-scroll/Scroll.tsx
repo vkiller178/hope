@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { VirtualScrollProps } from './types'
+import { Indicator as DefaultIndicator } from '.'
 
 // 获取数据的间隔
 const scrollTake = 400
@@ -24,14 +26,6 @@ interface ScrollItem {
   }
 
   [key: string]: any
-}
-interface VirtualScrollProps {
-  indicator?: React.ComponentType<{ load: LoadState }>
-  scrollBinderEleQuery?: string
-  renderItem: (item: ScrollItem) => any
-  key?: string
-  fetchMethod: (items: Array<ScrollItem>) => Promise<Array<ScrollItem>>
-  component?: string | any
 }
 
 const VirtualScroll: React.FC<VirtualScrollProps> = ({
@@ -64,17 +58,17 @@ const VirtualScroll: React.FC<VirtualScrollProps> = ({
 
   const getFeed = useRef<any>()
   getFeed.current = async () => {
-    setLoad(_ => ({ ..._, loading: LoadState.loading }))
+    setLoad((_) => ({ ..._, loading: LoadState.loading }))
     const feeds = await fetchMethod(scrollItemsStore)
 
     lastTick.current = performance.now()
 
     if (feeds.length > 0) {
-      setScrollItemsStore(_ => _.concat(feeds))
-      setDScrollItemsStore(_ => _.concat(feeds))
-      setLoad(_ => ({ ..._, loading: LoadState.needMore }))
+      setScrollItemsStore((_) => _.concat(feeds))
+      setDScrollItemsStore((_) => _.concat(feeds))
+      setLoad((_) => ({ ..._, loading: LoadState.needMore }))
     } else {
-      setLoad(_ => ({ ..._, loading: LoadState.noMore }))
+      setLoad((_) => ({ ..._, loading: LoadState.noMore }))
     }
   }
   useEffect(() => {
@@ -122,9 +116,9 @@ const VirtualScroll: React.FC<VirtualScrollProps> = ({
 
       Array.from(postElements).forEach((postE, index) => {
         // add scrolTop info, if not yet
-        setScrollItemsStore(posts => {
+        setScrollItemsStore((posts) => {
           const index = posts.findIndex(
-            p => p.id === +postE.getAttribute('data-item-key')
+            (p) => p.id === +postE.getAttribute('data-item-key')
           )
           posts[index] = {
             ...posts[index],
@@ -143,14 +137,14 @@ const VirtualScroll: React.FC<VirtualScrollProps> = ({
             const topIndex = index + 1
             postsWrapper.style.paddingTop =
               postElements[topIndex].offsetTop + 'px'
-            setDScrollItemsStore(_ => _.slice(topIndex))
+            setDScrollItemsStore((_) => _.slice(topIndex))
           }
         } else {
           const isLastDividE =
             index > 0 && !isOutBody(postElements[index - 1]) && isOutBody(postE)
 
           if (isLastDividE) {
-            setDScrollItemsStore(_ => _.slice(0, index - 1))
+            setDScrollItemsStore((_) => _.slice(0, index - 1))
           }
         }
       })
@@ -166,7 +160,7 @@ const VirtualScroll: React.FC<VirtualScrollProps> = ({
         },
         hasinsertE(posts: Array<ScrollItem>) {
           const _index = posts.findIndex(
-            p =>
+            (p) =>
               p.id === +postElements[this.index].getAttribute('data-item-key')
           )
 
@@ -190,12 +184,12 @@ const VirtualScroll: React.FC<VirtualScrollProps> = ({
       function insertBack() {
         if (compition.compare) {
           let last: number = 0
-          setScrollItemsStore(_ => {
+          setScrollItemsStore((_) => {
             const now = performance.now()
             if (now - last > 200) {
               last = now
               const dPostInsert = compition.hasinsertE(_)
-              setDScrollItemsStore(dp => dPostInsert(dp))
+              setDScrollItemsStore((dp) => dPostInsert(dp))
             }
 
             return _
@@ -230,7 +224,7 @@ const VirtualScroll: React.FC<VirtualScrollProps> = ({
   if (Component) {
     return (
       <Component className={wrapperCls.current()}>
-        {dScrollItemsStore.map(item => (
+        {dScrollItemsStore.map((item) => (
           <div className={itemCls} key={item[key]} data-item-key={item[key]}>
             {renderItem(item)}
           </div>
@@ -241,12 +235,16 @@ const VirtualScroll: React.FC<VirtualScrollProps> = ({
   }
   return (
     <div className={wrapperCls.current()}>
-      {dScrollItemsStore.map(item => (
+      {dScrollItemsStore.map((item) => (
         <div className={itemCls} key={item[key]} data-item-key={item[key]}>
           {renderItem(item)}
         </div>
       ))}
-      {Indicator && <Indicator load={load.loading} />}
+      {Indicator ? (
+        <Indicator load={load.loading} />
+      ) : (
+        <DefaultIndicator load={load.loading} />
+      )}
     </div>
   )
 }
