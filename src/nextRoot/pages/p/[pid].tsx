@@ -8,7 +8,8 @@ import time from 'dayjs'
 import converter from '../../../utils/markdownConvert'
 import Menu from '../../components/menu'
 import { menus } from '../../js/const'
-import styled from 'styled-components'
+import { PageContent } from '../../components/common/page'
+
 interface Post {
   title: string
   content: string
@@ -16,12 +17,6 @@ interface Post {
     username: string
   }
 }
-
-const PageContent = styled.div`
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 8px 20px;
-`
 
 const PostView = ({ post }) => {
   useEffect(() => {}, [])

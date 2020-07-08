@@ -14,6 +14,7 @@ const MenuRoot = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  z-index: 999;
   .menu-items {
     flex: 1;
     display: flex;
