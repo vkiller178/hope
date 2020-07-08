@@ -13,7 +13,13 @@ body {
 }
 
 #__next {
-  height: 100vh;
+  /* 双滚动的问题 https://stackoverflow.com/a/37113430 */
+  height: 100%;
   overflow-y: scroll;
-  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+html,
+body {
+  height: 100%;
 }
