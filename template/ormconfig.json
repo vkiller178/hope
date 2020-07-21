@@ -4,7 +4,7 @@
   "port": 3306,
   "username": "root",
   "password": "123456",
-  "database": "hope",
+  "database": "base",
   "entities": ["src/db/models/index.ts"],
   "migrationsTableName": "custom_migration_table",
   "migrations": ["src/db/migration/*.ts"],
