@@ -22,11 +22,11 @@ export default class User {
     return await UserModel.findOne(id)
   }
   @Get('/user')
-  async getSelf(@CookieParams() { token }) {
-    const { data } = decodeToken(token)
+  async getSelf(@CookieParams() { token }, @Ctx() ctx) {
+    const { uid } = ctx.session
     return {
-      id: +data,
-      username: (await UserModel.findOne({ where: { id: data } })).username,
+      id: +uid,
+      username: (await UserModel.findOne({ where: { id: uid } })).username,
     }
   }
   @Post('/open/registry')
@@ -59,9 +59,8 @@ export default class User {
     const u = await UserModel.findOne({ where: { username: body.username } })
     if (!u) bundleWithCode('用户未找到')
 
-    ctx.cookies.set('token', createToken(u.id), {
-      sameSite: true,
-    })
+    ctx.session.uid = u.id
+
     return 'success'
   }
 }

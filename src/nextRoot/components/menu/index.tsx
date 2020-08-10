@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { MenuProps, ItemProps } from './types'
+import Link from 'next/link'
+import { AppContext } from '../../pages/_app'
 
 const MenuRoot = styled.div`
   height: 48px;
@@ -30,6 +32,20 @@ const MenuItem = styled.div``
 const Logo = styled.a``
 
 const Menu: React.FC<MenuProps> = ({ menus }) => {
+  const appContext = useContext(AppContext)
+  const renderAuth = () => {
+    return (
+      <>
+        {appContext.userInfo.username ? (
+          <span>{appContext.userInfo.username}</span>
+        ) : (
+          <Link href="/login">
+            <a>登陆</a>
+          </Link>
+        )}
+      </>
+    )
+  }
   return (
     <MenuRoot>
       <Logo href="/">vkiller</Logo>
@@ -38,6 +54,7 @@ const Menu: React.FC<MenuProps> = ({ menus }) => {
           <MenuItem key={menu.title}>{menu.title}</MenuItem>
         ))}
       </div>
+      <div className="auth">{renderAuth()}</div>
     </MenuRoot>
   )
 }

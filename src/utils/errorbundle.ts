@@ -20,8 +20,9 @@ export const bundleWithCode = (opt: bundleWithCodeOpts | string) => {
 }
 
 export const exportBundleMessage = (msg: string): bundleWithCodeOpts => {
+  const { code, message } = JSON.parse(msg)
   return {
-    code: ErrorCodeMap.UNTRACKED,
-    message: msg,
+    code: code || ErrorCodeMap.UNTRACKED,
+    message,
   }
 }

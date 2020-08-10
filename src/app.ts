@@ -7,7 +7,6 @@ lodenv()
 import * as controllers from './api'
 import * as middlewares from './middlewares'
 import { createNextMiddleware } from './middlewares/next'
-import jwtMiddleware from './middlewares/jwt'
 import connection from './db'
 
 export const dev = process.env.NODE_ENV !== 'production'
@@ -16,12 +15,10 @@ export const apiPrefix = '/api/v1'
 const port = 3000
 ;(async () => {
   await connection()
-
-  const nextMiddleware = await createNextMiddleware()
   const koaApp = new Koa()
 
+  const nextMiddleware = await createNextMiddleware()
   koaApp.use(nextMiddleware)
-  koaApp.use(jwtMiddleware)
 
   useKoaServer(koaApp, {
     controllers: Object.values(controllers),
