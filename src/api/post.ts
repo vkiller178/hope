@@ -6,6 +6,7 @@ import {
   Body,
   CookieParams,
   QueryParams,
+  Ctx,
 } from 'routing-controllers'
 import { PostModel } from '../db/models'
 import { bundleWithCode } from '../utils/errorbundle'
@@ -15,19 +16,19 @@ import { postHide } from '../db/models/post'
 @Controller()
 export default class PostController {
   @Post('/post')
-  async create(@Body() body, @CookieParams() { token }) {
+  async create(@Body() body, @Ctx() ctx) {
     let p = new PostModel()
     for (const key in body) {
       p[key] = body[key]
     }
-    p.uid = decodeToken(token).data
+    p.uid = ctx.session.uid
     await p._save()
     return p
   }
   @Get('/post/:id')
-  async getOne(@Param('id') id: string, @CookieParams() { token }) {
+  async getOne(@Param('id') id: string, @Ctx() ctx) {
     let p = await PostModel.findOne({
-      where: { id, uid: decodeToken(token).data },
+      where: { id, uid: ctx.session.uid },
     })
     if (!p) bundleWithCode('文章不存在，或者不属于你')
 
@@ -35,19 +36,14 @@ export default class PostController {
   }
 
   @Post('/post/:id')
-  async modify(
-    @Param('id') id: string,
-    @CookieParams() { token },
-    @Body() body
-  ) {
+  async modify(@Param('id') id: string, @Body() body, @Ctx() ctx) {
     let p = await PostModel.findOne({
-      where: { id, uid: decodeToken(token).data },
+      where: { id, uid: ctx.session.uid },
     })
 
     if (!p) bundleWithCode('文章不存在，或者不属于你')
 
     for (const key in body) {
-      const element = body[key]
       p[key] = body[key]
     }
 

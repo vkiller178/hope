@@ -1,5 +1,4 @@
 import React from 'react'
-import useAuth, { LOCALSTATE } from '../js/hooks/useAuth'
 import { post } from '../js/request'
 import Menu from '../components/menu'
 import { menus } from '../js/const'

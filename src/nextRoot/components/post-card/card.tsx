@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 
 const CardWrapper = styled.div`
   display: inline-block;
+  width: 100%;
   &:not(:last-child) {
     border-bottom: 1px solid #eee;
   }

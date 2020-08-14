@@ -1,35 +1,42 @@
-import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import React, { useEffect, useContext } from 'react'
 import { get } from '../../js/request'
-import Head from 'next/head'
 import clsx from 'clsx'
-import useAuth from '../../js/hooks/useAuth'
-import time from 'dayjs'
 import converter from '../../../utils/markdownConvert'
 import Menu from '../../components/menu'
 import { menus } from '../../js/const'
 import { PageContent } from '../../components/common/page'
+import { AppContext } from '../_app'
+import { NextPage } from 'next'
+import { EditFilled } from '@ant-design/icons'
 
 interface Post {
+  id: number
   title: string
   content: string
   uid: {
     username: string
+    id: number
   }
 }
 
-const PostView = ({ post }) => {
+const PostView: NextPage<{ post: Post }> = ({ post }) => {
   useEffect(() => {}, [])
-  const router = useRouter()
-  const { isMe } = useAuth()
-
+  const { userInfo } = useContext(AppContext)
+  const isMine = post.uid.id === userInfo.id
   return (
     <>
       <Menu menus={menus} />
-      <PageContent
-        className={clsx('markdown-body')}
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <PageContent className={clsx('markdown-body')}>
+        <h1>
+          {isMine && (
+            <a href={`/write?pid=${post.id}`}>
+              <EditFilled />
+            </a>
+          )}
+          {post.title}
+        </h1>
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+      </PageContent>
     </>
   )
 }

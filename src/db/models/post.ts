@@ -23,6 +23,9 @@ export default class Post extends BaseModel {
 
   constructor() {
     super()
+    //TODO: 完善tags逻辑
+    this.tags = ''
+    this.hide = postHide.show
   }
   @PrimaryGeneratedColumn()
   id: number
@@ -35,10 +38,7 @@ export default class Post extends BaseModel {
   @Column('longtext')
   content: string
 
-  @ManyToOne(
-    type => UserModel,
-    user => user.posts
-  )
+  @ManyToOne((type) => UserModel, (user) => user.posts)
   uid: number
 
   @AfterLoad()
@@ -67,8 +67,8 @@ export default class Post extends BaseModel {
       where: { hide: postHide.show },
       relations: ['uid'],
       ...props,
-    }).then(posts =>
-      posts.map(p => {
+    }).then((posts) =>
+      posts.map((p) => {
         delete p.content
         return p
       })

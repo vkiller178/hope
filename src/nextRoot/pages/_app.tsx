@@ -17,6 +17,7 @@ const theme = {
 interface AppContextProp {
   userInfo: {
     username?: string
+    id?: number
   }
 }
 
@@ -29,7 +30,7 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     // 此方法会在客户端调用！并且每个页面都会调用一次
     get('/user').then((res) => {
-      setUserInfo(res)
+      res && setUserInfo(res)
     })
   }, [])
   return (

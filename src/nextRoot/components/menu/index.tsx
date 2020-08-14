@@ -1,8 +1,10 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { MenuProps, ItemProps } from './types'
+import { MenuProps } from './types'
 import Link from 'next/link'
 import { AppContext } from '../../pages/_app'
+import { Dropdown, Menu as AMenu } from 'antd'
+import { EditOutlined } from '@ant-design/icons'
 
 const MenuRoot = styled.div`
   height: 48px;
@@ -31,13 +33,25 @@ const MenuItem = styled.div``
 
 const Logo = styled.a``
 
+const userDropDown = (
+  <AMenu>
+    <AMenu.Item>
+      <a href="/write">
+        <EditOutlined /> 写文章
+      </a>
+    </AMenu.Item>
+  </AMenu>
+)
+
 const Menu: React.FC<MenuProps> = ({ menus }) => {
   const appContext = useContext(AppContext)
   const renderAuth = () => {
     return (
       <>
         {appContext.userInfo.username ? (
-          <span>{appContext.userInfo.username}</span>
+          <Dropdown overlay={userDropDown} placement="bottomCenter" arrow>
+            <span>{appContext.userInfo.username}</span>
+          </Dropdown>
         ) : (
           <Link href="/login">
             <a>登陆</a>
@@ -48,7 +62,7 @@ const Menu: React.FC<MenuProps> = ({ menus }) => {
   }
   return (
     <MenuRoot>
-      <Logo href="/">vkiller</Logo>
+      <Logo href="/">GodInSilence</Logo>
       <div className="menu-items">
         {menus.map((menu) => (
           <MenuItem key={menu.title}>{menu.title}</MenuItem>
