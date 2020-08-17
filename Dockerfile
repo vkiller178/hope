@@ -14,7 +14,7 @@ RUN apk add nodejs yarn
 
 COPY --from=packages /app /app
 
-COPY template/*  /app/
+COPY template/server/*  /app/
 COPY dist /app/dist
 COPY build /app/build
 

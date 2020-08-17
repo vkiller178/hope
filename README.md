@@ -104,6 +104,7 @@ services:
     environment:
       HOPE_DB_HOST: db
       HOPE_DB_PASSWORD: example
+      NODE_ENV: production
     ports:
       - "3000:3000"
 ```
