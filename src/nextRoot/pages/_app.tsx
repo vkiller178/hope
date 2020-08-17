@@ -1,8 +1,6 @@
 import Head from 'next/head'
-import App from 'next/app'
 import 'normalize.css'
 import 'antd/dist/antd.css'
-import '../style/global.css'
 
 import { ThemeProvider } from 'styled-components'
 import { get } from '../js/request'
@@ -46,6 +44,7 @@ export default function MyApp({ Component, pageProps }) {
           href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css"
           rel="stylesheet"
         />
+        <link href="/style/global.css" rel="stylesheet" />
       </Head>
       <AppContext.Provider value={{ userInfo }}>
         <ThemeProvider theme={theme}>
