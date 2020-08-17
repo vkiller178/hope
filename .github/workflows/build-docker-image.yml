@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn --no-lockfile
+      - run: yarn
       - run: yarn server:build
       - name: Log into registry
         run: echo "${{ secrets.DOCKER_IO_PASSWORD }}" | docker login docker.io -u rxh1212 --password-stdin
