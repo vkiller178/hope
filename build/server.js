@@ -7,7 +7,7 @@ const { resolve } = require('path')
  * 如果没有这两个值，则使用默认配置
  */
 function dbConfigReplace() {
-  const { HOPE_DB_HOST, HOPE_DB_PASSWORD } = process.env
+  const { HOPE_DB_HOST, HOPE_DB_PASSWORD, NODE_ENV } = process.env
 
   const envFile = resolve(__dirname, '../.env')
   const ormConfigFile = resolve(__dirname, '../ormconfig.json')
@@ -15,14 +15,14 @@ function dbConfigReplace() {
   function replaceAndWrite(path, replaceMethod) {
     const source = readFileSync(path, 'utf8')
     let replaced = ''
-    ;(replaceMethod() || []).map(args => {
+    ;(replaceMethod() || []).map((args) => {
       replaced = (replaced || source).replace(...args)
     })
 
-    if(!replaced) return Promise.resolve('nothing to change')
+    if (!replaced) return Promise.resolve('nothing to change')
 
     return new Promise((resolve, reject) => {
-      writeFile(path, replaced, err => {
+      writeFile(path, replaced, (err) => {
         if (err) {
           reject()
         } else {
@@ -37,6 +37,7 @@ function dbConfigReplace() {
     if (HOPE_DB_HOST) replace.push([/DB_HOST\=.*/, `DB_HOST=${HOPE_DB_HOST}`])
     if (HOPE_DB_PASSWORD)
       replace.push([/DB_PASSWORD\=.*/, `DB_PASSWORD=${HOPE_DB_PASSWORD}`])
+    if (NODE_ENV) replace.push([/NODE_ENV\=.*/, `NODE_ENV=${NODE_ENV}`])
     return replace
   }
 
