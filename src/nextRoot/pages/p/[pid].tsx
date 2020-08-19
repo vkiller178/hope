@@ -41,11 +41,15 @@ const PostView: NextPage<{ post: Post }> = ({ post }) => {
   )
 }
 
-PostView.getInitialProps = async (ctx) => {
+export async function getServerSideProps(ctx) {
+  console.time('fetch post')
+
   const { pid } = ctx.query
   const post = await get<Post>(`$/open/post/${pid}`)
   post.content = converter.makeHtml(post.content)
-  return { post }
+  console.timeEnd('fetch post')
+
+  return { props: { post } }
 }
 
 export default PostView
