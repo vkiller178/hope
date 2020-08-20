@@ -29,7 +29,9 @@ const MenuRoot = styled.div`
   }
 `
 
-const MenuItem = styled.div``
+const MenuItem = styled.div`
+  cursor: pointer;
+`
 
 const Logo = styled.a``
 
@@ -65,7 +67,9 @@ const Menu: React.FC<MenuProps> = ({ menus }) => {
       <Logo href="/">GodInSilence</Logo>
       <div className="menu-items">
         {menus.map((menu) => (
-          <MenuItem key={menu.title}>{menu.title}</MenuItem>
+          <Link key={menu.title} href={menu.action()}>
+            <MenuItem>{menu.title}</MenuItem>
+          </Link>
         ))}
       </div>
       <div className="auth">{renderAuth()}</div>

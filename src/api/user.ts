@@ -22,12 +22,18 @@ export default class User {
     return await UserModel.findOne(id)
   }
   @Get('/user')
-  async getSelf(@CookieParams() { token }, @Ctx() ctx) {
+  async getSelf(@Ctx() ctx) {
     const { uid } = ctx.session
     return {
       id: +uid,
       username: (await UserModel.findOne({ where: { id: uid } })).username,
     }
+  }
+
+  @Get('/open/users')
+  async getAllUsers() {
+    // TODO: 仅返回基础信息
+    return await UserModel.findAndCount()
   }
   @Post('/open/registry')
   async createUser(@Body() body) {

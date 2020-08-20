@@ -1,5 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
-import { PostModel, ActionModel } from '.'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm'
+import { PostModel, ActionModel, ResumeModel } from '.'
 import BaseModel from './common/base'
 
 @Entity({ name: 'user' })
@@ -17,15 +23,15 @@ export default class User extends BaseModel {
   @Column({ select: false })
   password: string
 
-  @OneToMany(
-    type => PostModel,
-    post => post.uid
-  )
+  @Column()
+  avatar: string
+
+  @OneToMany((type) => PostModel, (post) => post.uid)
   posts: Array<PostModel>
 
-  @OneToMany(
-    type => ActionModel,
-    action => action.uid
-  )
+  @OneToMany((type) => ActionModel, (action) => action.uid)
   actions: Array<ActionModel>
+
+  @OneToOne((type) => ResumeModel, (resume) => resume.user)
+  resume: ResumeModel
 }
