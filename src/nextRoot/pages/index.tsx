@@ -19,6 +19,7 @@ const getFeed = async (posts) => {
 
 const IndexPageContent = styled(PageContent)`
   display: flex;
+  padding: 8px 16px;
 `
 
 const Index: React.FC = () => {

@@ -30,7 +30,6 @@ const ResumeContent = styled('div')`
   margin: 0 auto;
   padding: 1em 0 2em;
 
-  padding: 16px;
   font-size: 16px;
 
   overflow-y: auto;
@@ -38,6 +37,7 @@ const ResumeContent = styled('div')`
 
   .github-fork-ribbon {
     cursor: pointer;
+    z-index: 998;
     &::before,
     &::after {
       box-sizing: content-box !important;
@@ -59,6 +59,7 @@ const ResumeContent = styled('div')`
   .base-info {
     display: flex;
     padding-right: 48px;
+    flex-wrap: wrap;
     .main {
       display: flex;
       align-items: flex-start;
@@ -69,6 +70,14 @@ const ResumeContent = styled('div')`
         background-size: cover;
         background-position: center;
         margin-right: 24px;
+      }
+
+      & > section {
+        min-width: 180px;
+      }
+
+      & .avatar {
+        flex-shrink: 0;
       }
     }
   }
@@ -232,7 +241,7 @@ const Friends: NextPage<{ resume: ResumeModel }> = ({ resume }) => {
                 <SmileOutlined />
                 自我介绍
               </h2>
-              <p>{resume.detail}</p>
+              <p dangerouslySetInnerHTML={{ __html: resume.detail }} />
             </section>
           </ResumeContent>
         </PageContent>

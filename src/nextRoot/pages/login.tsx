@@ -11,7 +11,7 @@ const layout = {
   wrapperCol: { span: 16 },
 }
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  wrapperCol: { span: 16, offset: 8 },
 }
 
 const LoginPage = styled(PageContent)`
@@ -22,6 +22,9 @@ const LoginPage = styled(PageContent)`
     width: 300px;
     margin: 0 auto;
     padding: 12px;
+    .ant-form-item {
+      overflow: hidden;
+    }
   }
 `
 
