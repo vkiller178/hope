@@ -66,6 +66,7 @@
     "react-dom": "^16.12.0",
     "react-use": "^13.27.0",
     "reflect-metadata": "^0.1.13",
+    "request": "^2.88.2",
     "routing-controllers": "^0.8.1-alpha.2",
     "showdown": "^1.9.1",
     "styled-components": "^5.0.0",

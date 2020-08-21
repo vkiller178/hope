@@ -1,18 +1,15 @@
 import Router from 'koa-router'
-import {
-  KoaMiddlewareInterface,
-  Middleware,
-  Middleware,
-} from 'routing-controllers'
+import { KoaMiddlewareInterface, Middleware } from 'routing-controllers'
 import { exportBundleMessage } from '../utils/errorbundle'
+import { Context } from 'koa'
 
 @Middleware({ type: 'after' })
 export class ResponseHandler implements KoaMiddlewareInterface {
-  async use(ctx: Router.IRouterContext, next: (err?: any) => Promise<any>) {
+  async use(ctx: Context, next: (err?: any) => Promise<any>) {
     if (!ctx._matchedRoute) {
       ctx.status = 404
     }
-    if (ctx.body && ctx.body.code === undefined) {
+    if (ctx.body && !ctx.body.writable && ctx.body.code === undefined) {
       ctx.body = {
         code: 1,
         data: !!ctx.body ? ctx.body : {},
@@ -40,13 +37,4 @@ export class ErrorHandler implements KoaMiddlewareInterface {
       }
     }
   }
-}
-
-/**
- * 测试canvas代理，模拟express的方式
- * https://github.com/niklasvh/html2canvas-proxy-nodejs/blob/master/server.js
- */
-@Middleware({ type: 'before' })
-export class CanvasHandler implements KoaMiddlewareInterface {
-  async use(ctx: Router.IRouterContext, next: (err?: any) => Promise<any>) {}
 }
