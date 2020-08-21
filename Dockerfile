@@ -11,7 +11,7 @@ FROM alpine
 EXPOSE 3000
 WORKDIR /app
 
-RUN apk add nodejs
+RUN apk add nodejs yarn
 
 COPY --from=packages /app /app
 
@@ -19,4 +19,4 @@ COPY template/server/*  /app/
 COPY dist /app/dist
 COPY build /app/build
 
-CMD npm run server:start
+CMD yarn server:start
