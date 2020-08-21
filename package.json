@@ -8,7 +8,7 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "dev": "nodemon",
     "next:build": "cd src/nextRoot && next build && echo $(cat ./.next/BUILD_ID)",
-    "server:build": "rimraf ./dist && tsc && yarn next:build && mkdir dist/nextRoot && cp -r src/nextRoot/.next dist/nextRoot/.next && cp -r src/nextRoot/public dist/nextRoot/public",
+    "server:build": "rimraf ./dist && tsc && yarn next:build && ls -l src/nextRoot/.next/static/chunks/pages && mkdir dist/nextRoot && cp -r src/nextRoot/.next dist/nextRoot/.next && cp -r src/nextRoot/public dist/nextRoot/public",
     "server:start": "node build/server.js && yarn server:db && node dist/app.js",
     "server:db": "typeorm migration:run"
   },
