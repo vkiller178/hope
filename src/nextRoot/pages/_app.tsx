@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import 'normalize.css'
 import 'antd/dist/antd.css'
 
 import { ThemeProvider } from 'styled-components'
