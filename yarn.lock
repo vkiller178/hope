@@ -2420,7 +2420,7 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     safe-buffer "^5.0.1"
 
 class-transformer@^0.2.3:
-  version "0.2.3"
+  version "0.3.1"
   resolved "https://r.cnpmjs.org/class-transformer/download/class-transformer-0.2.3.tgz#598c92ca71dcca73f91ccb875d74a3847ccfa32d"
   integrity sha1-WYySynHcynP5HMuHXXSjhHzPoy0=
 
@@ -4976,7 +4976,7 @@ lodash.sortby@^4.7.0:
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
 lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
-  version "4.17.15"
+  version "4.17.19"
   resolved "https://r.cnpmjs.org/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha1-tEf2ZwoEVbv+7dETku/zMOoJdUg=
 
