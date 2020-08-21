@@ -6,7 +6,7 @@ import { AppContext } from '../../pages/_app'
 import { Dropdown, Menu as AMenu } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
 
-const MenuRoot = styled.div`
+const MenuRoot = styled('div')`
   height: 48px;
   position: sticky;
   top: 0;
@@ -29,11 +29,9 @@ const MenuRoot = styled.div`
   }
 `
 
-const MenuItem = styled.div`
+const MenuItem = styled('div')`
   cursor: pointer;
 `
-
-const Logo = styled.a``
 
 const userDropDown = (
   <AMenu>
@@ -64,7 +62,7 @@ const Menu: React.FC<MenuProps> = ({ menus }) => {
   }
   return (
     <MenuRoot>
-      <Logo href="/">GodInSilence</Logo>
+      <a href="/">GodInSilence</a>
       <div className="menu-items">
         {menus.map((menu) => (
           <Link key={menu.title} href={menu.action()}>

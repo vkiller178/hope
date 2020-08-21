@@ -2,7 +2,7 @@ import React from 'react'
 import { LoadState } from './Scroll'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
+const Wrapper = styled('div')`
   display: flex;
   justify-content: center;
   padding: 20px 0;

@@ -4,7 +4,7 @@ import { post } from '../../js/request'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 
-const CardWrapper = styled.div`
+const CardWrapper = styled('div')`
   display: inline-block;
   width: 100%;
   &:not(:last-child) {
