@@ -69,7 +69,7 @@ const Login: React.FC = () => {
 
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
-              登陆
+              登录
             </Button>
           </Form.Item>
         </Form>

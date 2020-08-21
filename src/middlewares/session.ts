@@ -35,7 +35,7 @@ export class CheckSession implements KoaMiddlewareInterface {
       // open开始的接口不做权限验证
       if (!uid) {
         ctx.status = 401
-        bundleWithCode('需要先登陆！！')
+        bundleWithCode('需要先登录！！')
       }
     }
     await next()

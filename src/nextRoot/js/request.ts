@@ -47,7 +47,7 @@ instance.interceptors.response.use(
   ({ response, config, message }: AxiosError) => {
     console.error(`httpClient:${message}`)
     if (response && response.status === 401) {
-      // 清除登陆状态
+      // 清除登录状态
       return
     }
     // 服务出错。500以上错误，不返回reject，仍然不会触发上层的reject

@@ -56,7 +56,7 @@ const Menu: React.FC<MenuProps> = ({ menus }) => {
           </Dropdown>
         ) : (
           <Link href="/login">
-            <a>登陆</a>
+            <a>登录</a>
           </Link>
         )}
       </>
