@@ -7,9 +7,9 @@ enum ScrollDirection {
 }
 
 // 获取数据的间隔
-const scrollTake = 400
+const scrollTake = 1000
 // 容器触底的阈值
-const delta = 10
+const delta = 30
 // 超出可视区域后隐藏的阈值
 const outViewDelta = 2000
 
@@ -25,7 +25,7 @@ export default class ScrollHandler {
   lastDataFetchTime: number
   eventHandler: any
 
-  private lastScroll: number = 0
+  private loading: boolean = false
 
   private get compareIndex() {
     return this.postElements
@@ -58,7 +58,9 @@ export default class ScrollHandler {
   }
 
   fetchData() {
+    this.loading = true
     this.opts.fetchMethod.current().then(() => {
+      this.loading = false
       this.lastDataFetchTime = performance.now()
     })
   }
@@ -127,7 +129,7 @@ export default class ScrollHandler {
     const now = performance.now()
     const { bottom } = this.postsWrapper.getBoundingClientRect()
     if (
-      //TODO: loading状态判断
+      !this.loading &&
       Math.abs(bottom - this.opts.scrollBinderEle.clientHeight) < delta &&
       now - this.lastDataFetchTime > scrollTake &&
       this.direction === ScrollDirection.up
