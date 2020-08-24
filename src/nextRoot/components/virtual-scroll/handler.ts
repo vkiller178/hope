@@ -1,5 +1,5 @@
 import { ScrollHandlerOpts, ScrollItem } from './types'
-import { debounce } from 'lodash'
+import { throttle } from 'lodash'
 
 enum ScrollDirection {
   up = '加载更多',
@@ -45,11 +45,11 @@ export default class ScrollHandler {
     // 初始化时候调用获取数据的接口
     this.fetchData()
 
-    this.eventHandler = debounce(
+    this.eventHandler = throttle(
       (steps) => {
         this._eventHandler.call(this, steps)
       },
-      120,
+      10,
       {
         leading: false,
         trailing: true,
