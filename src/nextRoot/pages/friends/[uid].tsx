@@ -4,7 +4,7 @@ import Menu from '../../components/menu'
 import { menus } from '../../js/const'
 import { PageContent } from '../../components/common/page'
 import { get } from '../../js/request'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import { ResumeModel } from '../../../db/models'
 import {
   PhoneOutlined,
@@ -12,11 +12,10 @@ import {
   ApiOutlined,
   LaptopOutlined,
   SmileOutlined,
+  FileProtectOutlined,
 } from '@ant-design/icons'
 import Head from 'next/head'
 
-import html2canvas from 'html2canvas'
-import jsPdf from 'jspdf'
 import { Spin } from 'antd'
 
 enum contactMap {
@@ -26,13 +25,40 @@ enum contactMap {
   'github' = 'Github',
 }
 
+const G = createGlobalStyle`
+  @media print {
+    @page {
+      margin: 1.5cm 0;
+      size: A4;
+    }
+    .menu,#print-button {
+      display: none;
+    }
+
+    body {
+      height: auto;
+      font-size: 14px;
+      color: black;
+    }
+
+    * {
+      page-break-inside: always;
+    }
+    h2 {
+      page-break-after: avoid;
+      page-break-before: avoid;
+    }
+  }
+
+`
+
 const ResumeContent = styled('div')`
   margin: 0 auto;
-  padding: 1em 0 2em;
 
-  font-size: 16px;
+  width: 20.5cm;
+  word-break: keep-all;
+  font-size: 14px;
 
-  overflow-y: auto;
   overflow-x: hidden;
 
   .github-fork-ribbon {
@@ -70,6 +96,16 @@ const ResumeContent = styled('div')`
         background-size: cover;
         background-position: center;
         margin-right: 24px;
+        position: relative;
+        &::after {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          background-color: gray;
+          content: ' ';
+        }
       }
 
       & > section {
@@ -85,6 +121,17 @@ const ResumeContent = styled('div')`
   .skills-list {
     p {
       margin-bottom: 0.5em;
+    }
+  }
+
+  .projects-list {
+    .desc {
+      margin-bottom: 0;
+    }
+    .desc,
+    .skills {
+      font-style: italic;
+      font-size: 14px;
     }
   }
 
@@ -109,6 +156,15 @@ const renderExp = (exp: Resume.Exp) => {
     </section>
   )
 }
+
+const renderProject = (project: Resume.Project) => (
+  <section key={project.name}>
+    <h3>{project.name}</h3>
+    <p className="desc">简介：{project.desc}</p>
+    <p className="skills">技术栈：{project.technique}</p>
+    <p dangerouslySetInnerHTML={{ __html: project.detail }}></p>
+  </section>
+)
 
 const renderContact = (contact: Resume.Contact) => {
   return (
@@ -142,28 +198,7 @@ const Friends: NextPage<{ resume: ResumeModel }> = ({ resume }) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const printResume = () => {
-    const domElement = document.getElementById('resume-content')
-    setLoading(true)
-    html2canvas(domElement, {
-      onclone: (document) => {
-        document.getElementById('print-button').style.visibility = 'hidden'
-      },
-      proxy: '/api/v1/open/proxy',
-    })
-      .then((canvas) => {
-        const img = canvas.toDataURL('image/png')
-        const { width, height } = domElement.getBoundingClientRect()
-        const pdf = new jsPdf({
-          unit: 'px',
-          compress: true,
-          format: [width, height],
-        })
-        pdf.addImage(img, 'JPEG', 0, 0, width, height)
-        pdf.save(`${resume.nickname}-前端.pdf`)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    window.print()
   }
 
   return (
@@ -174,10 +209,11 @@ const Friends: NextPage<{ resume: ResumeModel }> = ({ resume }) => {
           href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css"
         />
       </Head>
-      <Menu menus={menus} />
+      <G />
+      <Menu className="menu" menus={menus} />
       <Spin spinning={loading}>
-        <PageContent id="resume-content">
-          <ResumeContent>
+        <PageContent>
+          <ResumeContent id="resume-content">
             <div
               id="print-button"
               className="github-fork-ribbon"
@@ -191,10 +227,10 @@ const Friends: NextPage<{ resume: ResumeModel }> = ({ resume }) => {
             <div className="base-info">
               {/* 基本信息 */}
               <div className="main">
-                <div
+                {/* <div
                   className="avatar"
                   style={{ backgroundImage: `url(${resume.user.avatar})` }}
-                />
+                /> */}
                 <section>
                   <h2>{resume.nickname}</h2>
                   <h3>{resume.intro}</h3>
@@ -234,6 +270,14 @@ const Friends: NextPage<{ resume: ResumeModel }> = ({ resume }) => {
                 工作经历
               </h2>
               <div>{resume.experience.map(renderExp)}</div>
+            </section>
+            {/* 项目经历 */}
+            <section className="projects-list">
+              <h2>
+                <FileProtectOutlined />
+                项目经历
+              </h2>
+              <div>{resume.projects.map(renderProject)}</div>
             </section>
             {/* 自我介绍 */}
             <section>

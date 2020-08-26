@@ -17,4 +17,11 @@ declare module Resume {
     duration: string
     level: string
   }
+
+  interface Project {
+    name: string
+    desc: string
+    technique: string
+    detail: string
+  }
 }

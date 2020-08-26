@@ -43,7 +43,14 @@ const userDropDown = (
   </AMenu>
 )
 
-const Menu: React.FC<MenuProps> = ({ menus }) => {
+/**
+ *
+ * 找到className被定义的地方，使用更优雅的方式代替目前的使用方式
+ */
+const Menu: React.FC<MenuProps & { className?: string }> = ({
+  menus,
+  ...props
+}) => {
   const appContext = useContext(AppContext)
   const renderAuth = () => {
     return (
@@ -61,7 +68,7 @@ const Menu: React.FC<MenuProps> = ({ menus }) => {
     )
   }
   return (
-    <MenuRoot>
+    <MenuRoot {...props}>
       <a href="/">GodInSilence</a>
       <div className="menu-items">
         {menus.map((menu) => (

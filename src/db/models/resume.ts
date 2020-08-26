@@ -28,6 +28,9 @@ export default class Resume extends BaseModel {
   @Column('json', { comment: '工作经历', nullable: true })
   experience: Array<Resume.Exp>
 
+  @Column('json', { comment: '项目经历', nullable: true })
+  projects: Array<Resume.Project>
+
   @Column('json', { comment: '教育经历', nullable: true })
   education: Array<Resume.Edu>
 
