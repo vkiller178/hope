@@ -7,9 +7,9 @@ enum ScrollDirection {
 }
 
 // 获取数据的间隔
-const scrollTake = 1000
+const scrollTake = 300
 // 容器触底的阈值
-const delta = 30
+const delta = 10
 // 超出可视区域后隐藏的阈值
 const outViewDelta = 2000
 
