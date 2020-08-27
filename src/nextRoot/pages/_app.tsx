@@ -40,7 +40,7 @@ export default function MyApp({ Component, pageProps }) {
         />
 
         <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css"
+          href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css"
           rel="stylesheet"
         />
         <link href="/style/global.css" rel="stylesheet" />

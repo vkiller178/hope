@@ -206,7 +206,7 @@ const Friends: NextPage<{ resume: ResumeModel }> = ({ resume }) => {
       <Head>
         <link
           rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css"
+          href="https://cdn.jsdelivr.net/npm/github-fork-ribbon-css@0.2.3/gh-fork-ribbon.css"
         />
       </Head>
       <G />
