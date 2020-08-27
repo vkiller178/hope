@@ -55,7 +55,7 @@ const G = createGlobalStyle`
 const ResumeContent = styled('div')`
   margin: 0 auto;
 
-  width: 20.5cm;
+  max-width: 20.5cm;
   word-break: keep-all;
   font-size: 14px;
 
