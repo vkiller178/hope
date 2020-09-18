@@ -18,13 +18,18 @@
 - [x] 构建过程，密码文本私密化（`docker.io`的密码）
 - [x] 生产环境数据库配置从镜像中分离
 - [ ] 部署文档
-- [ ] 优化构建流程以提高速度
+- [ ] 优化构建流程以提高打包速度
 
 - 2020.6.19
 
 - [ ] 采用相对路径部署
 - [ ] 文章编辑成功后的反馈
 - [ ] 首页加载优化
+- [ ] 首页整体优化
+      按照时间排序
+      增加发布时间、作者、点击数等信息
+      优化 preview 部分的效果，目前展示的 preview 不可控且不美观
+- [ ] 确定 UI 框架，清理多余依赖
 
 ## 开发
 
@@ -126,4 +131,4 @@ docker buildx build --platform linux/amd64,linux/arm64 -t rxh1212/hope --push .
 
 ## 资料
 
-- [material-ui](https://material-ui.com/zh/guides/server-rendering/)
+- ~~[material-ui](https://material-ui.com/zh/guides/server-rendering/)~~
