@@ -30,9 +30,9 @@ const WriteContent = styled(PageContent)`
     display: flex;
     align-items: center;
     border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
     .input-title {
       font-size: 20px;
-      padding-bottom: 20px;
       flex-shrink: 0;
       flex: 1;
     }
@@ -68,7 +68,7 @@ const WriteView = ({ pid }) => {
 
   const onSaving = async () => {
     if (status.current.pid) {
-      await post(`/post/${status.current.pid}`, paper)
+      await post(`!/post/${status.current.pid}`, paper)
       // 删除
       localStorage.removeItem(localKey)
     } else {

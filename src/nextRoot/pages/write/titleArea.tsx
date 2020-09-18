@@ -11,10 +11,10 @@ export enum SavingStatus {
 const labels = {
   [SavingStatus.saving]: (
     <span>
-      <LoadingOutlined /> 正在保存草稿
+      <LoadingOutlined /> 本地缓存
     </span>
   ),
-  [SavingStatus.success]: <span>保存成功</span>,
+  [SavingStatus.success]: <span>缓存成功</span>,
   [SavingStatus.miss]: null,
 }
 
@@ -28,9 +28,8 @@ const TitleArea: React.FunctionComponent<{
 }> = ({ status, onSubmit }) => {
   return (
     <>
-      {labels[status]}
       <SubmitButton disabled={status !== SavingStatus.miss} onClick={onSubmit}>
-        提交
+        {labels[status] || '确认提交'}
       </SubmitButton>
     </>
   )

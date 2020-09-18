@@ -18,6 +18,8 @@ export interface Post {
   dom: {
     offsetTop: number
   }
+
+  createTime: number
 }
 
 export interface CardProps {

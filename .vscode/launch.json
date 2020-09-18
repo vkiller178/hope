@@ -2,6 +2,7 @@
   // Use IntelliSense to learn about possible attributes.
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  // 会有一个map.js 找不到的报错，https://github.com/microsoft/vscode/issues/102042#issuecomment-656402933
   "version": "0.2.0",
   "configurations": [
     {
@@ -25,6 +26,10 @@
       "runtimeArgs": [
         "-x",
         "node --inspect=5858 -r ts-node/register/transpile-only src/app.ts"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
       ]
     }
   ]

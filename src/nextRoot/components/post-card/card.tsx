@@ -3,10 +3,13 @@ import { CardProps } from './types'
 import { post } from '../../js/request'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import PostInfo from '../common/post-info'
+import dayjs from 'dayjs'
 
 const CardWrapper = styled('div')`
   display: inline-block;
   width: 100%;
+  padding: 16px 0;
   &:not(:last-child) {
     border-bottom: 1px solid #eee;
   }
@@ -15,13 +18,21 @@ const CardWrapper = styled('div')`
     font-weight: 600;
   }
 
-  & > span {
-    color: blueviolet;
-    cursor: pointer;
-    user-select: none;
-    font-size: 12px;
-    padding: 12px 0;
-    display: block;
+  .markdown-body {
+    text-align: justify;
+  }
+
+  .handle-bar {
+    display: flex;
+    align-items: center;
+
+    & > span {
+      color: blueviolet;
+      cursor: pointer;
+      user-select: none;
+      display: block;
+      padding-right: 8px;
+    }
   }
 `
 
@@ -39,6 +50,12 @@ const PostCard: React.FC<CardProps> = ({ p, ...props }) => {
     router.push(`/p/${p.id}`)
   }
 
+  const postInfoValues = [
+    p.uid.username,
+    dayjs(p.createTime).format('YYYY-MM-DD'),
+    p.click,
+  ]
+
   return (
     <CardWrapper {...props}>
       <h1>{p.title}</h1>
@@ -46,7 +63,10 @@ const PostCard: React.FC<CardProps> = ({ p, ...props }) => {
         dangerouslySetInnerHTML={{ __html: p.brief }}
         className="markdown-body"
       />
-      <span onClick={viewPage}>查看详情</span>
+      <div className="handle-bar">
+        <span onClick={viewPage}>阅读更多</span>
+        <PostInfo values={postInfoValues} />
+      </div>
     </CardWrapper>
   )
 }

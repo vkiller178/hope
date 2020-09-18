@@ -7,7 +7,7 @@ const { resolve } = require('path')
  * 如果没有这两个值，则使用默认配置
  */
 function dbConfigReplace() {
-  const { HOPE_DB_HOST, HOPE_DB_PASSWORD, NODE_ENV } = process.env
+  const { HOPE_DB_HOST, HOPE_DB_PASSWORD, NODE_ENV, HOPE_DB_NAME } = process.env
 
   const envFile = resolve(__dirname, '../.env')
   const ormConfigFile = resolve(__dirname, '../ormconfig.json')
@@ -38,6 +38,7 @@ function dbConfigReplace() {
     if (HOPE_DB_PASSWORD)
       replace.push([/DB_PASSWORD\=.*/, `DB_PASSWORD=${HOPE_DB_PASSWORD}`])
     if (NODE_ENV) replace.push([/NODE_ENV\=.*/, `NODE_ENV=${NODE_ENV}`])
+    if (HOPE_DB_NAME) replace.push([/DB_NAME\=.*/, `DB_NAME=${HOPE_DB_NAME}`])
     return replace
   }
 

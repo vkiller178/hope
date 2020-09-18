@@ -1,5 +1,6 @@
 import Axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios'
 import qs from 'qs'
+import { message } from 'antd'
 
 interface BaseResponse {
   data: any
@@ -30,15 +31,17 @@ instance.interceptors.response.use(
   ({ data, status, config }: AxiosResponse<BaseResponse>) => {
     if (status === 200) {
       if (data.code === 1) {
-        if (config.headers['X-QUITE'] === RequestType.all) {
+        if (config.headers['X-QUITE'] === RequestType.error) {
           // 成功提示
+          message.success(data.msg || '操作成功')
         }
         return data.data
       } else {
         // 业务问题
         console.warn(`httpClient:${data.msg}`)
-        if (config.headers['X-QUITE'] === RequestType.all) {
+        if (config.headers['X-QUITE'] === RequestType.error) {
           // 失败提示
+          message.error(data.msg)
         }
       }
     }

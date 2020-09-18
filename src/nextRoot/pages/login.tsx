@@ -34,7 +34,7 @@ const Login: React.FC = () => {
   }
 
   const onFinish = async (values) => {
-    const res = await post<string | undefined>('/open/login', values)
+    const res = await post<string | undefined>('!/open/login', values)
     if (res) {
       location.href = '/'
     }

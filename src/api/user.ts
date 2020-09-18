@@ -62,8 +62,10 @@ export default class User {
 
   @Post('/open/login')
   async login(@Body() body, @Ctx() ctx: Context) {
-    const u = await UserModel.findOne({ where: { username: body.username } })
-    if (!u) bundleWithCode('用户未找到')
+    const u = await UserModel.findOne({
+      where: { username: body.username, password: body.password },
+    })
+    if (!u) bundleWithCode('用户名或密码不正确')
 
     ctx.session.uid = u.id
 

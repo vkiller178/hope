@@ -16,7 +16,7 @@ import {
 } from '@ant-design/icons'
 import Head from 'next/head'
 
-import { Spin } from 'antd'
+import { Spin, message } from 'antd'
 
 enum contactMap {
   'phone' = '手机',
@@ -56,7 +56,7 @@ const ResumeContent = styled('div')`
   margin: 0 auto;
 
   max-width: 20.5cm;
-  word-break: keep-all;
+  /* word-break: keep-all; */
   font-size: 14px;
 
   overflow-x: hidden;
@@ -198,6 +198,10 @@ const Friends: NextPage<{ resume: ResumeModel }> = ({ resume }) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const printResume = () => {
+    if (window.innerWidth < 1080) {
+      message.warning('打印功能仅支持PC设备')
+      return
+    }
     window.print()
   }
 

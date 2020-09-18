@@ -15,6 +15,8 @@ export enum postHide {
   'show' = '0',
 }
 
+const breifBreak = '<!-- more -->'
+
 @Entity({ name: 'post' })
 export default class Post extends BaseModel {
   protected like: number
@@ -44,7 +46,10 @@ export default class Post extends BaseModel {
   @AfterLoad()
   getBrief() {
     if (this.content) {
-      this.brief = converter.makeHtml(this.content.slice(0, 100))
+      let breakIndex = this.content.indexOf(breifBreak)
+      this.brief = converter.makeHtml(
+        this.content.slice(0, ~breakIndex ? breakIndex : 100)
+      )
     }
   }
 
@@ -65,6 +70,9 @@ export default class Post extends BaseModel {
   static async getFeed(props) {
     return await this.find({
       where: { hide: postHide.show },
+      order: {
+        createTime: 'DESC',
+      },
       relations: ['uid'],
       ...props,
     }).then((posts) =>
