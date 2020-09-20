@@ -4,6 +4,7 @@
   "extends": "./src/nextRoot/tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
+    "allowJs": false,
     "outDir": "dist",
     "target": "esnext",
     "isolatedModules": false,

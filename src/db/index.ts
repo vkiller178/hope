@@ -1,8 +1,11 @@
 import { createConnection } from 'typeorm'
 import * as entities from './models'
+import { timeEnd, time, timeLog } from 'console'
 
 export default async function connection() {
-  return createConnection({
+  time('db')
+
+  await createConnection({
     type: 'mysql',
     host: process.env.DB_HOST,
     port: 3306,
@@ -12,4 +15,6 @@ export default async function connection() {
     synchronize: false,
     entities: Object.values(entities),
   })
+
+  timeLog('db')
 }

@@ -3,6 +3,7 @@ import { parse } from 'url'
 import { resolve } from 'path'
 import next from 'next'
 import { Context } from 'koa'
+import { time, timeLog } from 'console'
 
 const conf = {
   typescript: {
@@ -28,10 +29,14 @@ export async function createNextMiddleware() {
   //TODO: compile非常慢
   const nextApp = next({
     dir: resolve(__dirname, '../nextRoot'),
-    conf,
+    // conf,
     dev,
   })
+  time('next prepare')
+
   await nextApp.prepare()
+
+  timeLog('next prepare')
 
   const handler = await nextApp.getRequestHandler()
 
