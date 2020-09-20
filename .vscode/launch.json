@@ -12,25 +12,6 @@
       "port": 5858,
       "skipFiles": ["<node_internals>/**"],
       "restart": true
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/nodemon",
-      "restart": true,
-      "sourceMaps": true,
-      "console": "internalConsole",
-      "internalConsoleOptions": "openOnSessionStart",
-      "port": 5858,
-      "runtimeArgs": [
-        "-x",
-        "node --inspect=5858 -r ts-node/register/transpile-only src/app.ts"
-      ],
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ]
     }
   ]
 }

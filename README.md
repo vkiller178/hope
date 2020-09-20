@@ -130,6 +130,18 @@ docker buildx build --platform linux/amd64,linux/arm64 -t rxh1212/hope --push .
 - [macos 系统](https://docs.docker.com/docker-for-mac/multi-arch/)
 - [Linux 系统](https://www.infoq.cn/article/V9Qj0fJj6HsGYQ0LpHxg)
 
+###本地开发
+
+> vscode 开启调试模式后，next 构建非常慢
+
+目前采用 nodemon 的方式，管理 node 程序的自动重启。
+
+```bash
+yarn dev
+```
+
+这种方式启动后，会开启 5858 的调试端口。此时 vscode 可以选择性地接入调试功能，只不过目前尚不清楚开启调试后，next 构建异常缓慢的原因。
+
 ## 资料
 
 - ~~[material-ui](https://material-ui.com/zh/guides/server-rendering/)~~
