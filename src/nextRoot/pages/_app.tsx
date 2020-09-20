@@ -44,6 +44,7 @@ export default function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
         <link href="/style/global.css" rel="stylesheet" />
+        <link type="image/ico" rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <AppContext.Provider value={{ userInfo }}>
         <ThemeProvider theme={theme}>
