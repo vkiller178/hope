@@ -6,4 +6,6 @@ dist
 *.gz
 *.tar
 
+sitemap.txt
+
 yarn-error.log

@@ -8,11 +8,14 @@ import { PageContent } from '../../components/common/page'
 import { AppContext } from '../_app'
 import { NextPage } from 'next'
 import { EditFilled } from '@ant-design/icons'
+import Head from 'next/head'
 
 interface Post {
   id: number
   title: string
   content: string
+  brief: string
+  tags: string
   uid: {
     username: string
     id: number
@@ -25,6 +28,11 @@ const PostView: NextPage<{ post: Post }> = ({ post }) => {
   const isMine = post.uid.id === userInfo.id
   return (
     <>
+      <Head>
+        <title>{post.title} - vkiller.club</title>
+        <meta name="keywords" content={post.tags}></meta>
+        <meta name="description" content={post.brief}></meta>
+      </Head>
       <Menu menus={menus} />
       <PageContent className={clsx('markdown-body')}>
         <h1>

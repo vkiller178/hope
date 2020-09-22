@@ -8,6 +8,7 @@ import * as controllers from './api'
 import * as middlewares from './middlewares'
 import { createNextMiddleware } from './middlewares/next'
 import connection from './db'
+import sitemap from './sitemap'
 
 export const dev = process.env.NODE_ENV !== 'production'
 export const apiPrefix = '/api/v1'
@@ -15,6 +16,9 @@ export const apiPrefix = '/api/v1'
 const port = 3000
 ;(async () => {
   await connection()
+
+  sitemap()
+
   const koaApp = new Koa()
 
   const nextMiddleware = await createNextMiddleware()
