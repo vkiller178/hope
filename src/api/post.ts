@@ -12,6 +12,7 @@ import { PostModel } from '../db/models'
 import { bundleWithCode } from '../utils/errorbundle'
 import { decodeToken } from '../middlewares/jwt'
 import { postHide } from '../db/models/post'
+import { updateLine } from '../sitemap'
 
 @Controller()
 export default class PostController {
@@ -23,6 +24,8 @@ export default class PostController {
     }
     p.uid = ctx.session.uid
     await p._save()
+    // update sitemap
+    updateLine(`/p/${p.id}`)
     return p
   }
   @Get('/post/:id')

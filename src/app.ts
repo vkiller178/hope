@@ -17,7 +17,7 @@ const port = 3000
 ;(async () => {
   await connection()
 
-  sitemap()
+  await sitemap()
 
   const koaApp = new Koa()
 

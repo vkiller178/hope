@@ -72,7 +72,7 @@ const WriteView = ({ pid }) => {
       // 删除
       localStorage.removeItem(localKey)
     } else {
-      const { id } = await post(`/post`, paper)
+      const { id } = await post(`!/post`, paper)
       status.current.pid = id
       // 删除
       localStorage.removeItem(LOCAL_CACHE_KEY_NEW_PAPER)
