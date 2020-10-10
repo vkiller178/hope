@@ -1,19 +1,5 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-  Body,
-  Ctx,
-  CookieParam,
-  CookieParams,
-  Params,
-  BodyParam,
-} from 'routing-controllers'
-import { UserModel, ResumeModel } from '../db/models'
-import { bundleWithCode } from '../utils/errorbundle'
-import { createToken, decodeToken } from '../middlewares/jwt'
-import { Context } from 'koa'
+import { Controller, Get, Param } from 'routing-controllers'
+import { ResumeModel } from '../db/models'
 
 @Controller()
 export default class User {

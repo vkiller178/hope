@@ -113,6 +113,9 @@ services:
       HOPE_DB_PASSWORD: example
       HOPE_DB_NAME: hope
       NODE_ENV: production
+      GH_REPO=hope-blog-images
+      GH_USER=Xixi20160512
+      GH_TOKEN=xxx
     ports:
       - "3000:3000"
 ```

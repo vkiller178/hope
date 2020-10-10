@@ -5,18 +5,12 @@ import styled from 'styled-components'
 import { useState, useEffect, useRef, SyntheticEvent } from 'react'
 import { get, post } from '../../js/request'
 import TitleArea, { SavingStatus } from './titleArea'
-import { githubUploader } from 'github-file-save'
+import { githubUploader } from '@rxh/imager'
 
 const LOCAL_CACHE_KEY_NEW_PAPER = 'cache-paper-new'
 const LOCAL_CACHE_KEY_OLD_PAPER = 'cache-paper-old'
 
 const notEmptyPaper = (p) => p !== '{}'
-
-githubUploader.setConfig({
-  repo: process.env.GH_REPO,
-  token: process.env.GH_TOKEN,
-  user: process.env.GH_USER,
-})
 
 interface Paper {
   title?: string
@@ -133,6 +127,15 @@ const WriteView = ({ pid }) => {
 
     // 第一次执行
     timerCallback.current()
+
+    // 获取环境变量
+    get('/common/env').then(({ GH_REPO, GH_TOKEN, GH_USER }) => {
+      githubUploader.setConfig({
+        repo: GH_REPO,
+        token: GH_TOKEN,
+        user: GH_USER,
+      })
+    })
 
     return () => {
       clearInterval(timer)
