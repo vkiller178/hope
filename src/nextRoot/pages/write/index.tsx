@@ -2,14 +2,21 @@ import Menu from '../../components/menu'
 import { menus } from '../../js/const'
 import { PageContent } from '../../components/common/page'
 import styled from 'styled-components'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, SyntheticEvent } from 'react'
 import { get, post } from '../../js/request'
 import TitleArea, { SavingStatus } from './titleArea'
+import { githubUploader } from 'github-file-save'
 
 const LOCAL_CACHE_KEY_NEW_PAPER = 'cache-paper-new'
 const LOCAL_CACHE_KEY_OLD_PAPER = 'cache-paper-old'
 
 const notEmptyPaper = (p) => p !== '{}'
+
+githubUploader.setConfig({
+  repo: process.env.GH_REPO,
+  token: process.env.GH_TOKEN,
+  user: process.env.GH_USER,
+})
 
 interface Paper {
   title?: string
@@ -48,6 +55,7 @@ const WriteView = ({ pid }) => {
   const [paper, setPaper] = useState<Paper>({})
   const timerCallback = useRef(() => {})
   const status = useRef({ fetched: false, pid })
+  const textAreaRef = useRef<any>()
   const [saving, setSaving] = useState(SavingStatus.miss)
 
   let localKey = LOCAL_CACHE_KEY_OLD_PAPER + `_${status.current.pid}`
@@ -131,6 +139,33 @@ const WriteView = ({ pid }) => {
     }
   }, [])
 
+  const onPaste = (e: SyntheticEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    //@ts-ignore
+    let dataTransform = e.clipboardData || e.nativeEvent.dataTransfer
+
+    if (!dataTransform) return
+
+    const file = dataTransform.files[0]
+
+    if (file) {
+      githubUploader.upload([file]).then((urls) => {
+        if (urls.length > 0) {
+          urls.forEach((url) => {
+            if (url) {
+              const textAreaPosition = textAreaRef.current.selectionStart
+              paper.content =
+                paper.content.slice(0, textAreaPosition) +
+                `![](${url})` +
+                paper.content.slice(textAreaPosition)
+            }
+          })
+        }
+      })
+    }
+  }
+
   return (
     <>
       <Menu menus={menus} />
@@ -152,6 +187,9 @@ const WriteView = ({ pid }) => {
           placeholder="开始码字吧，支持markdown，但不支持事实转换～"
           value={paper.content}
           onChange={onPaperChange.bind(null, 'content')}
+          onPaste={onPaste}
+          onDrop={onPaste}
+          ref={textAreaRef}
         />
       </WriteContent>
     </>
