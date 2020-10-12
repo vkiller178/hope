@@ -143,8 +143,6 @@ const WriteView = ({ pid }) => {
   }, [])
 
   const onPaste = (e: SyntheticEvent) => {
-    e.stopPropagation()
-    e.preventDefault()
     //@ts-ignore
     let dataTransform = e.clipboardData || e.nativeEvent.dataTransfer
 
@@ -153,6 +151,8 @@ const WriteView = ({ pid }) => {
     const file = dataTransform.files[0]
 
     if (file) {
+      e.stopPropagation()
+      e.preventDefault()
       githubUploader.upload([file]).then((urls) => {
         if (urls.length > 0) {
           urls.forEach((url) => {
