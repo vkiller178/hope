@@ -47,7 +47,8 @@ const PostCard: React.FC<CardProps> = ({ p, ...props }) => {
       },
     })
 
-    router.push(`/p/${p.id}`)
+    // router.push(`/p/${p.id}`)
+    window.open(`/p/${p.id}`)
   }
 
   const postInfoValues = [
