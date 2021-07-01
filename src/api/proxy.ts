@@ -1,5 +1,4 @@
 import { Controller, Get, Ctx } from 'routing-controllers'
-import url from 'url'
 import { Context } from 'koa'
 import request from 'request'
 
@@ -12,9 +11,12 @@ export default class Proxy {
   @Get('/proxy')
   async html2canvasProxy(@Ctx() ctx: Context) {
     return ctx.req.pipe(
-      request(ctx.query.url.replace('https', 'http')).on('error', (err) => {
-        throw new Error(err)
-      })
+      request((ctx.query.url as string).replace('https', 'http')).on(
+        'error',
+        (err) => {
+          throw new Error(err)
+        }
+      )
     )
   }
 }

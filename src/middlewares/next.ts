@@ -1,20 +1,12 @@
 import { dev, apiPrefix } from '../app'
-import { parse } from 'url'
 import { resolve } from 'path'
 import next from 'next'
 import { Context } from 'koa'
 import { time, timeLog } from 'console'
+import { UrlWithParsedQuery } from 'url'
 
 const conf = {
-  typescript: {
-    ignoreDevErrors: true,
-    ignoreBuildErrors: true,
-  },
-
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Note: we provide webpack above so you should not `require` it
-    // Perform customizations to webpack config
-    // Important: return the modified config
+  webpack: (config, { webpack }) => {
     config.plugins.push(
       new webpack.DefinePlugin({
         window: 'window',
@@ -28,6 +20,7 @@ const conf = {
 export async function createNextMiddleware() {
   const nextApp = next({
     dir: resolve(__dirname, '../nextRoot'),
+    //@ts-ignore
     conf,
     dev,
   })
@@ -41,14 +34,14 @@ export async function createNextMiddleware() {
 
   return async (ctx: Context, next) => {
     if (!~ctx.originalUrl.indexOf(apiPrefix)) {
-      const { path } = parse(ctx.originalUrl, true)
-      console.time(path)
+      const url = new URL(ctx.originalUrl, ctx.origin)
+      console.time(url.pathname)
       const result = await handler(
         ctx.req,
         ctx.res,
-        parse(ctx.originalUrl, true)
+        url.pathname as unknown as UrlWithParsedQuery
       )
-      console.timeEnd(path)
+      console.timeEnd(url.pathname)
       return result
     }
     await next()
