@@ -4,16 +4,16 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   AfterLoad,
+  ManyToMany,
+  JoinTable,
+  In,
+  getManager,
+  JoinColumn,
 } from 'typeorm'
-import { UserModel, ActionModel } from '.'
+import { UserModel, ActionModel, TagModal, PostModel } from '.'
 import BaseModel from './common/base'
 import { UserActionType } from './action'
 import converter from '../../utils/markdownConvert'
-
-export enum postHide {
-  'hide' = '1',
-  'show' = '0',
-}
 
 const breifBreak = '<!-- more -->'
 
@@ -25,18 +25,23 @@ export default class Post extends BaseModel {
 
   constructor() {
     super()
-    //TODO: 完善tags逻辑
-    this.tags = ''
-    this.hide = postHide.show
+    this.visible = true
   }
+
   @PrimaryGeneratedColumn()
   id: number
+
   @Column()
   title: string
+
+  @ManyToMany(() => TagModal)
+  @JoinTable()
+  @JoinColumn({ referencedColumnName: 'id' })
+  tags: TagModal[]
+
   @Column()
-  tags: string
-  @Column()
-  hide: postHide
+  visible: boolean
+
   @Column('longtext')
   content: string
 
@@ -67,19 +72,33 @@ export default class Post extends BaseModel {
     })
   }
 
-  static async getFeed(props) {
-    return await this.find({
-      where: { hide: postHide.show },
-      order: {
-        createTime: 'DESC',
-      },
-      relations: ['uid'],
-      ...props,
-    }).then((posts) =>
-      posts.map((p) => {
-        delete p.content
-        return p
+  static async getFeed({ tags = '', visible = true, ...props }) {
+    let query = getManager().createQueryBuilder(Post, 'post')
+
+    if (tags) {
+      // post 按 tag 过滤 https://github.com/typeorm/typeorm/issues/3369
+      query = query.innerJoin(
+        'post.tags',
+        'postTag',
+        'postTag.id IN (:...tagIds) AND postTag.visible=1',
+        {
+          tagIds: tags.split(',').map((v) => +v),
+        }
+      )
+    }
+
+    query
+      .where('post.visible = :visible', {
+        visible,
       })
-    )
+      .leftJoinAndSelect('post.tags', 'tag')
+      .leftJoinAndSelect('post.uid', 'uid')
+      .take(props.take)
+      .skip(props.skip)
+      .orderBy('post.createTime', 'DESC')
+    // 可以打印出 sql 查询语句
+    // console.log(query.getQueryAndParameters())
+
+    return await query.getManyAndCount()
   }
 }

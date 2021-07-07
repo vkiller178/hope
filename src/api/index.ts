@@ -1,5 +1,6 @@
 export { default as user } from './user'
 export { default as post } from './post'
+export { default as tag } from './tag'
 export { default as userAction } from './userActions'
 export { default as resume } from './resume'
 export { default as proxy } from './proxy'

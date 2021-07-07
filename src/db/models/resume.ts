@@ -22,22 +22,22 @@ export default class Resume extends BaseModel {
   @Column('longtext', { comment: '详细自我介绍' })
   detail: string
 
-  @Column('json', { comment: '技能', nullable: true })
+  @Column('longtext', { comment: '技能' })
   skills: Array<string>
 
-  @Column('json', { comment: '工作经历', nullable: true })
+  @Column('longtext', { comment: '工作经历' })
   experience: Array<Resume.Exp>
 
-  @Column('json', { comment: '项目经历', nullable: true })
+  @Column('longtext', { comment: '项目经历' })
   projects: Array<Resume.Project>
 
-  @Column('json', { comment: '教育经历', nullable: true })
+  @Column('longtext', { comment: '教育经历' })
   education: Array<Resume.Edu>
 
-  @Column('json', { comment: '联系方式', nullable: true })
+  @Column('longtext', { comment: '联系方式' })
   contact: Array<Resume.Contact>
 
-  @OneToOne((type) => UserModel)
+  @OneToOne((type) => UserModel, (user) => user.resume)
   @JoinColumn()
   user: UserModel
 }

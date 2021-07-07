@@ -35,13 +35,11 @@ export async function createNextMiddleware() {
   return async (ctx: Context, next) => {
     if (!~ctx.originalUrl.indexOf(apiPrefix)) {
       const url = new URL(ctx.originalUrl, ctx.origin)
-      console.time(url.pathname)
       const result = await handler(
         ctx.req,
         ctx.res,
         url.pathname as unknown as UrlWithParsedQuery
       )
-      console.timeEnd(url.pathname)
       return result
     }
     await next()

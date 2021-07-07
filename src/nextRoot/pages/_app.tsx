@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import 'antd/dist/antd.css'
+import '../styles/global.css'
 
 import { ThemeProvider } from 'styled-components'
 import { get } from '../js/request'

@@ -1,0 +1,21 @@
+.tagList {
+  & > .button:not(:last-child) {
+    margin-right: 16px;
+  }
+}
+
+.button {
+  position: relative;
+  display: inline-block;
+  & .toogleButton {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate3d(50%, -50%, 0);
+  }
+
+  &:hover .toogleButton {
+    display: block;
+  }
+}

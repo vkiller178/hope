@@ -9,7 +9,7 @@ export class ResponseHandler implements KoaMiddlewareInterface {
     if (!ctx._matchedRoute) {
       ctx.status = 404
     }
-    if (ctx.body && ctx.body.writable && ctx.body.code === undefined) {
+    if (ctx.body && ctx.body.code === undefined) {
       ctx.body = {
         code: 1,
         data: !!ctx.body ? ctx.body : {},

@@ -1,3 +1,5 @@
+import { PostModel } from '../../../db/models'
+
 export interface Post {
   id: number
   /**
@@ -23,6 +25,6 @@ export interface Post {
 }
 
 export interface CardProps {
-  p: Post
+  p: any
   [key: string]: any
 }

@@ -4,24 +4,43 @@ import {
   Param,
   Post,
   Body,
-  CookieParams,
   QueryParams,
   Ctx,
 } from 'routing-controllers'
-import { PostModel } from '../db/models'
+import { PostModel, TagModal } from '../db/models'
 import { bundleWithCode } from '../utils/errorbundle'
-import { decodeToken } from '../middlewares/jwt'
-import { postHide } from '../db/models/post'
 import { updateLine } from '../sitemap'
+
+async function handlerPost(key: string, val: any) {
+  if (key === 'tags') {
+    let arrar = []
+    if (Array.isArray(val)) {
+      for (const name of val) {
+        let tag = await TagModal.findOne({ where: { name } })
+        if (!tag) {
+          tag = new TagModal()
+          tag.getData({
+            name,
+            visible: true,
+          })
+          await tag._save()
+        }
+        arrar.push(tag)
+      }
+    }
+
+    return arrar
+  }
+
+  return val
+}
 
 @Controller()
 export default class PostController {
   @Post('/post')
   async create(@Body() body, @Ctx() ctx) {
     let p = new PostModel()
-    for (const key in body) {
-      p[key] = body[key]
-    }
+    await p.getData(body, handlerPost)
     p.uid = ctx.session.uid
     await p._save()
     // update sitemap
@@ -32,6 +51,7 @@ export default class PostController {
   async getOne(@Param('id') id: string, @Ctx() ctx) {
     let p = await PostModel.findOne({
       where: { id, uid: ctx.session.uid },
+      relations: ['tags'],
     })
     if (!p) bundleWithCode('文章不存在，或者不属于你')
 
@@ -46,9 +66,7 @@ export default class PostController {
 
     if (!p) bundleWithCode('文章不存在，或者不属于你')
 
-    for (const key in body) {
-      p[key] = body[key]
-    }
+    await p.getData(body, handlerPost)
 
     await p._save()
 
@@ -56,13 +74,13 @@ export default class PostController {
   }
 
   @Get('/open/feed')
-  async getFeedPost(@QueryParams() { skip, take }) {
-    return await PostModel.getFeed({ skip, take })
+  async getFeedPost(@QueryParams() query) {
+    return await PostModel.getFeed(query)
   }
   @Get('/open/post/:id')
   async getPost(@Param('id') id) {
     let p = await PostModel.findOne({
-      where: { id, hide: postHide.show },
+      where: { id, visible: true },
       relations: ['uid'],
     })
     if (!p) bundleWithCode('文章不存在，或者不可见')
